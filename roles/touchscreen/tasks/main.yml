@@ -1,0 +1,23 @@
+---
+
+- name: Installing touchscreen-specific packages
+  pacman:
+    name: "{{ ts_packages }}"
+    state: latest
+
+- name: Enabling the gnome desktop environment
+  systemd:
+    name: gdm.service 
+    enabled: true
+
+- name: Configuring firefox for touchscreen use
+  become: yes
+  lineinfile:
+    dest: /etc/security/pam_env.conf
+    line: "MOZ_USE_XINPUT2 DEFAULT=1"
+    insertafter: "EOF"
+
+
+
+
+

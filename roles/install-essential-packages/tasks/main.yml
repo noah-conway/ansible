@@ -1,0 +1,10 @@
+- name: Installing essential packages
+  pacman:
+    name: "{{ packages_essential }}"
+    state: latest
+
+- name: Configuring git username
+  command: git config --global user.name "{{ gituser }}"
+
+- name: Configuring git email
+  command: git config --global user.name "{{ gitemail }}"

@@ -1,0 +1,36 @@
+gituser: "noah-conway"
+gitemail: "nconway@posteo.net"
+packages_essential:
+  - base-devel
+  - linux-headers
+  - pacman-contrib
+  - networkmanager
+  - dhcpcd
+  - nmap
+  - inetutils
+  - net-tools
+  - dnsutils
+  - vim
+  - nano
+  - git
+  - curl
+  - wget
+  - make
+  - sudo
+  - openssh
+  - unrar
+  - unzip
+  - tar
+  - lm_sensors
+  - bash-completion
+  - man-pages
+  - man-db
+  - tree
+  - htop
+  - python
+  - python-numpy
+  - noto-fonts
+  - noto-fonts-cjk
+  - noto-fonts-emoji
+  - xorg-fonts-misc
+  - ansible

@@ -1,0 +1,13 @@
+- name: Installing Intel microcode
+  pacman:
+    name: intel-ucode
+    state: latest
+
+- name: Enabling early microcode in systemdboot
+  lineinfile:
+    dest: /boot/loader/entries/arch.conf 
+    line: "initrd  /intel-ucode.img"
+    insertbefore: "^initrd  /initramfs-linux.img"
+  become: yes
+
+

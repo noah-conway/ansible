@@ -1,0 +1,7 @@
+---
+- name: Installing nonessential packages
+  pacman:
+    name: "{{ pkgs_graphical }}"
+    state: latest
+
+  

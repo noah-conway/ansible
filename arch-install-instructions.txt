@@ -1,0 +1,127 @@
+- Connect to WiFi via iwd:
+    $ device list
+    if Wifi interface is powered off:
+        $ device *device* set-property Powered on
+    $ station *device* scan #initiate scan for networks
+    $ station *device* get-networks #list networks
+    $ station *device* connect *SSID* #connect
+
+- assign root password (too ssh)
+    $ passwd
+
+- Verify the boot mode:
+    $ cat /sys/firmware/efi/fw_platform_size
+  if the above command returns 64 the system is booted in UEFI mode
+
+- Update the system clock:
+    $ timedatectl
+
+- Partition the disks:
+    layout: 
+        1 gb boot partition - EFI system partition for UEFI
+        rest of drive - root partition as linux filesystem
+
+    create Ext4 filesystem on root partition:
+        $ mkfs.ext4 /dev/*root*
+
+    format EFI boot partition to FAT32
+        $ mkfs.fat -F 32 /dev/*efi*
+
+    to encrypt the root partition:
+        $ cryptsetup luksFormat /dev/*root*
+        then open the partition to work on it
+        $ cryptsetup open /dev/*root* *someTitle*
+        then put a fileystem on that mfer
+        $ mkfs.btrfs /dev/mapper/someTitle
+
+- Mount the disks
+    $ mount /dev/mapper/root /mnt
+    $ mkdir /mnt/boot
+    $ mount /dev/sda1 /mnt/boot
+    $ lsblk -l #verify
+
+- PACSTRAP
+    $ pacstrap -K /mnt base linux linux-firmware
+
+- generate fstab file
+    $ genfstab -U /mnt >> /mnt/etc/fstab
+
+- then, chroot into newly installed system
+    $ arch-chroot /mnt
+
+- install other needed packages
+    $ pacman -S networkmanager python openssh vi sudo cryptsetup #last 1 only for encrypted installs
+
+- set the time zone:
+    $ ln -sf /usr/share/zoneinfo/*region*/*city* /etc/localtime
+
+- run hwclock to generate /etc/adjtime:
+    $ hwclock --systohc
+
+- localization:
+    edit locale.gen and uncomment locale (en_US.UFT-8, en_US.ISO) 
+    $ locale-gen
+
+- create a hostname
+    echo *hostname* > /etc/hostname
+
+- create /etc/hosts file
+127.0.0.1   localhost
+::1         localhost
+127.0.1.1   *hostname*.localdomain *hostname*
+
+- enable networkmanager (otherwise no wifi when reboot out of chroot)
+    $ systemctl enable NetworkManager.service
+
+- enable ssh (for ansible)
+    $ systemctl enable sshd
+
+- create a root password
+    $ passwd
+
+- create a non-root user
+    $ useradd -G wheel -m *user*
+    $ passwd *user*
+
+- add that user to the sudoers file:
+    $ visudo
+    add the line:
+        *user* ALL=(ALL) NOPASSWD:ALL
+
+- VERY IMPORTANT FOR ENCRYPTED INSTALLS
+    decrypt drive on boot:
+        edit /etc/mkinitcpio.conf
+        edit HOOKS - add:
+            HOOKS = ( ... encrypt ... )
+    then update mkinitcpio
+        $ mkinitcpio -p linux
+
+- Installing bootloader
+    Install systemd-boot:
+        $ bootctl install
+    Create loader configurations:
+        $ cd /boot/
+        verify vmlinuz-linuz is there
+        edit /boot/loader/loader.conf with this configuration:
+
+        default arch.conf
+        timeout 4
+        console-mode max
+        editor no
+
+    Then create boot entry for arch linux:
+        $ cd /boot/loader/entries
+        edit arch.conf (or same name as default from above step)
+
+            title   Arch Linux
+            linux   /vmlinuz-linux
+            initrd  /initramfs-linux.img
+            options root="LABEL=Arch OS" rw #for NONENCRYPTED install
+            options cryptdevice=UUID=*device UUID*:root root=/dev/mapper/root rw #for ENCRYPTED install
+
+            ^ a good way to get the UUID for the root partition is to :r !blkid in vi
+
+- time to reboot! exit the chroot and:
+    $ umount -R /mnt
+    $ reboot
+        

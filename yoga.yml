@@ -1,0 +1,17 @@
+- hosts: elaine
+  become: yes
+
+  tasks:
+
+    - name: Unconditionally reboot the machine with all defaults
+      ansible.builtin.reboot:
+
+  roles:
+    - role: pacman-mirrors
+    - role: pacman-multilib
+    - role: load-microcode
+    - role: ssh
+    - role: install-essential-packages
+    - role: install-aur-helper
+    - role: install-graphical-packages
+    - role: touchscreen

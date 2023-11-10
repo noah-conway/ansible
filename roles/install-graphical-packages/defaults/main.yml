@@ -1,0 +1,16 @@
+pkgs_graphical:
+  - mesa
+  - thunderbird
+  - bitwarden
+  - sxiv
+  - imagemagick
+  - exiv2
+  - musescore
+  - audacity
+  - noto-fonts
+  - noto-fonts-cjk
+  - noto-fonts-emoji
+  - ttf-liberation
+  - xorg-fonts-misc
+
+

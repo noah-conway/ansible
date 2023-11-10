@@ -1,0 +1,28 @@
+- name: Installing reflector
+  pacman:
+    name: reflector
+    state: latest
+
+- name: Create backup copy of mirrorlist
+  become: yes
+  command: cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
+  args:
+    creates: /etc/pacman.d/mirrorlist.bak
+
+- name: Configuring reflector for "{{ region }}"
+  become: yes
+  lineinfile: 
+    dest: /etc/xdg/reflector/reflector.conf
+    regexp: "^# --country France,Germany"
+    line: "--country '{{ region }}'"
+
+- name: Starting reflector
+  systemd:
+    name: reflector.service
+    enabled: true
+    state: started
+
+
+
+
+    
