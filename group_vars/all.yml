@@ -1,0 +1,4 @@
+XDG_CONFIG_HOME: "/home/{{ ansible_user_id }}/.config"
+GIT_USER: "noah-conway"
+GIT_EMAIL: "nconway@posteo.net"
+GIT_URL: "git@github.com:noah-conway"

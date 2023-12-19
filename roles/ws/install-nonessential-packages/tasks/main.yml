@@ -1,7 +1,7 @@
 ---
 - name: Installing nonessential packages
-  pacman:
-    name: "{{ pkgs_graphical }}"
+  ansible.builtin.pacman:
+    name: "{{ pkgs_nonessential }}"
     state: latest
 
   

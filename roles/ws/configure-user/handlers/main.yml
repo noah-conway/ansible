@@ -1,0 +1,8 @@
+---
+- name: test
+  ansible.builtin.debug:
+    msg: "test handler"
+
+- name: test2
+  ansible.builtin.debug:
+    msg: "test handler again"

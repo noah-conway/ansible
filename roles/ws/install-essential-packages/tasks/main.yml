@@ -1,0 +1,11 @@
+- ansible.builtin.assert: 
+    that: "ansible_os_family == 'Archlinux'"
+    fail_msg: "Error: install-essential-packages module designed only for Arch systems"
+
+- name: Installing essential packages
+  become: yes
+  community.general.pacman:
+    name: "{{ packages_essential }}"
+    state: latest
+
+

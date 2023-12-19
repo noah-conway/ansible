@@ -1,12 +1,16 @@
-pkgs_graphical:
-  - mesa
+pkgs_nonessential:
   - thunderbird
   - bitwarden
   - sxiv
   - imagemagick
   - exiv2
-  - musescore
   - audacity
+  - bluez
+  - bluez-utils
+  - cups
+  - cups-pdf
+  - python-numpy
+  - python-pandas
   - noto-fonts
   - noto-fonts-cjk
   - noto-fonts-emoji

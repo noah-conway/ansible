@@ -1,5 +1,6 @@
 - name: "Enable multilib"
-  lineinfile:
+  become: yes
+  ansible.builtin.lineinfile:
     dest: "/etc/pacman.conf"
     state: "present"
     line: "[multilib]"
@@ -7,8 +8,10 @@
     insertafter: "^#\\[multilib\\]"
   notify: Update pacman
 
-- name: "Enable multilib (cont)"
-  lineinfile:
+
+- name: "Adding mirrorlist to multilib"
+  become: yes
+  ansible.builtin.lineinfile:
     dest: "/etc/pacman.conf"
     state: "present"
     line: "Include = /etc/pacman.d/mirrorlist"
@@ -16,7 +19,7 @@
     regexp: "Include = /etc/pacman.d/mirrorlist"
   notify: Update pacman
 
-- name: Flush handlers
+- name: Updating Pacman
   meta: flush_handlers
 
 

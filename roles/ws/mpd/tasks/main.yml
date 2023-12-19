@@ -1,0 +1,11 @@
+---
+- name: Installing MPD packages
+  become: yes
+  community.general.pacman:
+    name:
+      - mpd
+      - mpc
+      - ncmpcpp
+      - beets
+    state: latest
+    

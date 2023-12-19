@@ -1,0 +1,71 @@
+# This module is a catch-all for basic user configurations
+# Configures git user and email, and configures shell according to specifications
+#
+# Git user and email defaults to null values, which means the modules won't run by default. Define these variables elsewhere 
+
+# Edits the $XDG_CONFIG_HOME/.gitconfig file insteat f "git config..." commands: this ensures that this module runs even if git is not currently installed
+
+- name: ansible user test
+  ansible.builtin.debug:
+    msg: "{{ ansible_user_id }}"
+
+- name: Configuring global git variables
+  ansible.builtin.lineinfile:
+    dest: "{{ XDG_CONFIG_HOME }}/git/config"
+    line: "{{ item.line }}"
+    insertafter: "{{ item.insertafter }}"
+    state: present
+    create: true
+  when: 'GIT_USER is defined and GIT_EMAIL is defined'
+  loop:
+    - line: "[user]"
+      insertafter: "EOF"
+    - line: " name = {{ GIT_USER }}"
+
+- name: Creating git global user configurations for "{{ ansible_user_id }}"
+  ansible.builtin.lineinfile:
+    dest: "{{ XDG_CONFIG_HOME }}/git/config"
+    line: "[user]"
+    insertafter: "EOF"
+    state: present
+    create: true
+  when: 'GIT_USER is defined and GIT_EMAIL is defined'
+
+- name: Adding git --global user.name
+  ansible.builtin.lineinfile:
+    dest: "{{ XDG_CONFIG_HOME }}/git/config"
+    line: " name = {{ GIT_USER }}"
+    insertafter: "^[user]"
+    state: present
+  when: 'GIT_USER is defined'
+
+- name: Adding git --global user.email
+  ansible.builtin.lineinfile:
+    dest: "{{ XDG_CONFIG_HOME }}/git/config"
+    line: " email = {{ GIT_EMAIL }}"
+    insertafter: "^ name = {{ GIT_USER }}"
+    state: present
+  when: 'GIT_EMAIL is defined'
+
+# Default shell is bash: to switch to zsh, define shell: zsh in the corresponding playbook
+- name: Installing Z Shell
+  become: yes
+  ansible.builtin.package:
+    name:
+      - zsh
+      - zsh-completions
+    state: latest
+  when: '"zsh" in shell'
+
+- name: Cloning Z Shell configurations
+  ansible.builtin.git:
+    repo: "{{ GIT_URL }}/zsh.git"
+    dest: "{{ XDG_CONFIG_HOME }}"
+    clone: true
+  ignore_errors: true
+  when: '"zsh" in shell and configure == true'
+
+    
+
+
+

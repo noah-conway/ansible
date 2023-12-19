@@ -1,17 +1,19 @@
 - hosts: elaine
-  become: yes
+  remote_user: noah
+  vars:
+    shell: zsh
+
 
   tasks:
 
-    - name: Unconditionally reboot the machine with all defaults
+    - name: Rebooting the machine
       ansible.builtin.reboot:
 
   roles:
-    - role: pacman-mirrors
-    - role: pacman-multilib
-    - role: load-microcode
-    - role: ssh
-    - role: install-essential-packages
-    - role: install-aur-helper
-    - role: install-graphical-packages
-    - role: touchscreen
+    - role: ws/pacman-mirrors
+    - role: ws/pacman-multilib
+    - role: ws/load-microcode
+    - role: security/ssh
+    - role: ws/install-essential-packages
+    - role: ws/install-aur-helper
+    - role: ws/install-nonessential-packages

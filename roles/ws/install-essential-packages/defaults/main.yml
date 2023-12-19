@@ -27,10 +27,6 @@ packages_essential:
   - man-db
   - tree
   - htop
+  - gdu
   - python
-  - python-numpy
-  - noto-fonts
-  - noto-fonts-cjk
-  - noto-fonts-emoji
-  - xorg-fonts-misc
   - ansible
