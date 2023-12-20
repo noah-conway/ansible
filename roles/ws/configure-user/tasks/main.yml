@@ -9,43 +9,46 @@
   ansible.builtin.debug:
     msg: "{{ ansible_user_id }}"
 
-- name: Configuring global git variables
-  ansible.builtin.lineinfile:
-    dest: "{{ XDG_CONFIG_HOME }}/git/config"
-    line: "{{ item.line }}"
-    insertafter: "{{ item.insertafter }}"
-    state: present
-    create: true
-  when: 'GIT_USER is defined and GIT_EMAIL is defined'
+- name: Creating git config file in XDG_CONFIG_HOME
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    owner: "{{ LOCALUSER }}"
+    group: "{{ LOCALUSER }}"
+    mode: "{{ item.mode }}"
+    state: "{{ item.state }}"
+    recurse: "{{ item.recurse }}"
+  when: 'XDG_CONFIG_HOME is defined'
   loop:
-    - line: "[user]"
-      insertafter: "EOF"
-    - line: " name = {{ GIT_USER }}"
+    - path: "{{ XDG_CONFIG_HOME }}/git"
+      state: directory
+      mode: '755'
+      recurse: yes
+    - path: "{{ XDG_CONFIG_HOME }}/git/config"
+      state: touch
+      mode: '644'
+      recurse: no
 
-- name: Creating git global user configurations for "{{ ansible_user_id }}"
-  ansible.builtin.lineinfile:
-    dest: "{{ XDG_CONFIG_HOME }}/git/config"
-    line: "[user]"
-    insertafter: "EOF"
-    state: present
-    create: true
-  when: 'GIT_USER is defined and GIT_EMAIL is defined'
+- name: Configuring git username and email
+  community.general.git_config:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    scope: global
+  loop:
+    - name: user.name
+      value: "{{ GIT_USER }}"
+    - name: user.email
+      value: "{{ GIT_EMAIL }}"
 
-- name: Adding git --global user.name
-  ansible.builtin.lineinfile:
+- name: Copying git config file according to XDG directory specifications
+  ansible.builtin.copy:
+    src: "/home/{{ LOCALUSER }}/.gitconfig"
     dest: "{{ XDG_CONFIG_HOME }}/git/config"
-    line: " name = {{ GIT_USER }}"
-    insertafter: "^[user]"
-    state: present
-  when: 'GIT_USER is defined'
+    remote_src: yes
+    owner: "{{ LOCALUSER }}"
+    group: "{{ LOCALUSER }}"
+    mode: '644'
 
-- name: Adding git --global user.email
-  ansible.builtin.lineinfile:
-    dest: "{{ XDG_CONFIG_HOME }}/git/config"
-    line: " email = {{ GIT_EMAIL }}"
-    insertafter: "^ name = {{ GIT_USER }}"
-    state: present
-  when: 'GIT_EMAIL is defined'
+
 
 # Default shell is bash: to switch to zsh, define shell: zsh in the corresponding playbook
 - name: Installing Z Shell

@@ -1,0 +1,9 @@
+---
+localuser:
+  name: noah
+  shell: zsh
+  sudo: true
+  dotfiles: true
+  git_ssh: true
+browser: firefox
+editor: neovim

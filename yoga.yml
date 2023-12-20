@@ -1,10 +1,9 @@
 - hosts: elaine
   remote_user: noah
-  vars:
-    shell: zsh
 
+  pre_tasks:
+    - 
 
-  tasks:
 
     - name: Rebooting the machine
       ansible.builtin.reboot:
