@@ -1,0 +1,18 @@
+---
+- ansible.builtin.assert:
+  that: "ansible_os_family == 'Archlinux'"
+
+- name: '----------> Loading Microcode'
+  ansible.builtin.include: load-microcode.yml
+
+- name: '----------> Configuring Date & Time'
+
+- name: '----------> Configuring Network'
+
+- name: '----------> Configuring Pacman'
+  ansible.builtin.include: pacman.yml
+
+- name: '----------> Installing essential packages'
+
+
+

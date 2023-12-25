@@ -1,0 +1,57 @@
+---
+- name: Installing pacman management packages
+  become: yes
+  community.general.pacman:
+    name: 
+      - reflector
+      - pacman-contrib
+    state: latest
+
+- name: Create backup copy of mirrorlist
+  become: yes
+  ansible.builtin.copy:
+    src: /etc/pacman.d/mirrorlist
+    dest: /etc/pacman.d/mirrorlist.bak
+    remote_src: true
+    owner: root
+    group: root
+    mode: "644"
+    force: no
+
+- name: Configuring reflector for "{{ region }}"
+  become: yes
+  ansible.builtin.lineinfile: 
+    dest: /etc/xdg/reflector/reflector.conf
+    regexp: "^# --country France,Germany"
+    line: "--country '{{ region }}'"
+
+- name: Starting reflector
+  become: yes
+  ansible.builtin.systemd:
+    name: reflector.service
+    enabled: true
+    state: started
+
+- name: "Enabling multilib"
+  become: yes
+  ansible.builtin.lineinfile:
+    dest: "/etc/pacman.conf"
+    state: "present"
+    line: "{{ item.line }}"
+    regexp: "{{ item.regexp }}"
+    insertafter: "{{ item.insertafter }}"
+  loop:
+    - line: "[multilib]"
+      regexp: "^\\[multilib\\]"
+      insertafter: "^#\\[multilib\\]"
+    - line: "Include = /etc/pacman.d/mirrorlist"
+      insertafter: "^\\[multilib\\]"
+      regexp: "Include = /etc/pacman.d/mirrorlist"
+  notify: Update pacman
+
+- name: Flushing handlers
+  meta: flush_handlers
+
+
+
+
