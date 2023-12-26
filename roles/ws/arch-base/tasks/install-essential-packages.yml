@@ -1,0 +1,24 @@
+- name: Installing essential packages
+  become: yes
+  community.general.pacman:
+    name: "{{ packages_essential }}"
+    state: latest
+
+- name: "Allow {{ ansible_automation_user }} to run 'sudo pacman' without a password"
+  become: yes
+  ansible.builtin.lineinfile:
+    path: /etc/sudoers.d/11-install-aur_builder
+    line: '{{ ansible_automation_user }} ALL=(ALL) NOPASSWD: /usr/bin/pacman'
+    create: yes
+    mode: 0644
+    validate: 'visudo -cf %s'
+
+- name: Installing "{{ helper }}" aur helper
+  aur:
+    name: "{{ helper }}"
+    use: makepkg
+    state: present
+  become: yes
+  become_user: "{{ ansible_automation_user }}"
+
+

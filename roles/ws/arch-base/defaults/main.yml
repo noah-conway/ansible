@@ -1,5 +1,4 @@
-gituser: "noah-conway"
-gitemail: "nconway@posteo.net"
+helper: paru
 packages_essential:
   - base-devel
   - linux-headers

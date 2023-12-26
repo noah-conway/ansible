@@ -9,6 +9,7 @@
   community.general.pacman:
     name: intel-ucode
     state: latest
+  when: '"Intel" is in {{ ansible_processor }}'
 
 - name: Enabling early microcode in systemdboot
   ansible.builtin.lineinfile:
