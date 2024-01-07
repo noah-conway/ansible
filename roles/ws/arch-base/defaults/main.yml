@@ -1,3 +1,5 @@
+region: 'United States'
+pacman_parallel_dls: 5
 helper: paru
 packages_essential:
   - base-devel

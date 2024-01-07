@@ -24,13 +24,18 @@
     dest: /etc/xdg/reflector/reflector.conf
     regexp: "^# --country France,Germany"
     line: "--country '{{ region }}'"
+  notify: Start reflector
 
-- name: Starting reflector
+- name: Create backup copy of pacman.conf
   become: yes
-  ansible.builtin.systemd:
-    name: reflector.service
-    enabled: true
-    state: started
+  ansible.builtin.copy:
+    src: /etc/pacman.conf
+    dest: /etc/pacman.conf.bak
+    remote_src: true
+    owner: root
+    group: root
+    mode: "644"
+    force: no
 
 - name: "Enabling multilib"
   become: yes
@@ -49,8 +54,23 @@
       regexp: "Include = /etc/pacman.d/mirrorlist"
   notify: Update pacman
 
-- name: Flushing handlers
-  meta: flush_handlers
+- name: Enabling Parallel Downloads
+  become: yes
+  ansible.builtin.lineinfile:
+    dest: "/etc/pacman.conf"
+    regexp: "^#ParallelDownloads = 5"
+    line: "ParallelDownloads = {{ pacman_parallel_dls }}"
+  when: 'pacman_parallel_dls > 0'
+  notify: Start reflector
+
+- name: Update pacman
+  become: yes
+  community.general.pacman:
+    update_cache: true
+    upgrade: true
+
+- meta: flush_handlers
+  become: yes
 
 
 

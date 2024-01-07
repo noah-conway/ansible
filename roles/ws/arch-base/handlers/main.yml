@@ -1,0 +1,18 @@
+- name: Start reflector
+  become: yes
+  ansible.builtin.systemd:
+    name: reflector.service
+    enabled: true
+    state: started
+
+- name: Update pacman debug
+  become: yes
+  ansible.builtin.debug:
+    msg: "{{ ansible_user_id }}"
+
+- name: Update pacman 
+  #become: true
+  #become_user: root
+  community.general.pacman:
+    update_cache: true
+    upgrade: true

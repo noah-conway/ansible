@@ -2,20 +2,21 @@
 - name: Verifying boot loader
   ansible.builtin.stat:
     path: "/boot/EFI/systemd/systemd-bootx64.efi"
-  register: systemdboot
+  register: stat_systemdboot
 
 - name: Installing Intel microcode
   become: yes
   community.general.pacman:
     name: intel-ucode
     state: latest
-  when: '"Intel" is in {{ ansible_processor }}'
+  when: "ansible_processor[1] == 'GenuineIntel'"
 
 - name: Enabling early microcode in systemdboot
+  become: yes
   ansible.builtin.lineinfile:
     dest: /boot/loader/entries/arch.conf 
     line: "initrd  /intel-ucode.img"
     insertbefore: "^initrd  /initramfs-linux.img"
-  become: yes
+  when: "ansible_processor[1] == 'GenuineIntel' and stat.systemdboot is defined"
 
 

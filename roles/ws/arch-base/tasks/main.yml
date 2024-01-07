@@ -1,19 +1,20 @@
 ---
-- ansible.builtin.assert:
-  that: "ansible_os_family == 'Archlinux'"
+- ansible.builtin.assert: { that: "ansible_os_family == 'Archlinux'" }
+
+- ansible.builtin.debug:
+    msg: 'aau: {{ ansible_user_id }}'
 
 - name: '----------> Loading Microcode'
-  ansible.builtin.include: load-microcode.yml
-
-- name: '----------> Configuring Date & Time'
-
-- name: '----------> Configuring Network'
+  ansible.builtin.include_tasks:
+    file: load-microcode.yml
 
 - name: '----------> Configuring Pacman'
-  ansible.builtin.include: pacman.yml
+  ansible.builtin.include_tasks:
+    file: pacman.yml
 
-- name: '----------> Installing essential packages'
-  ansible.builtin.include: install-essential-packages.yml
+- name: '----------> Installing essential packages and configure AUR'
+  ansible.builtin.include_tasks:
+    file: install-essential-packages.yml
 
 
 
