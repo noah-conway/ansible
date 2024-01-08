@@ -25,6 +25,7 @@
     name: "{{ localuser.name }}"
     groups: "wheel"
     append: true
+  when: "localuser.sudo == true"
   
     
 

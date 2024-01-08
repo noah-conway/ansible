@@ -31,20 +31,16 @@
   ansible.builtin.slurp:
     src: '/home/{{ localuser.name }}/.ssh/id_ed25519.pub'
   register: local_pubkey
-
-- name: "Retrieving {{ localuser.name }}'s public key slurptest"
-  ansible.builtin.slurp:
-    src: '/home/{{ localuser.name }}/slurptest'
-  register: slurptest
+    
+- ansible.builtin.debug:
+    msg: "{{ localuser_default_password }}"
 
 - name: "Adding {{ localuser.name }}'s key to noah-conway's github account"
   community.general.github_key:
     name: "Access key for {{ localuser.name }}@{{ ansible_hostname }}"
-    token: '{{ github_PAT }}'
-    pubkey: local_pubkey
+    token: "{{ github_PAT }}"
+    pubkey: "{{ local_pubkey['content'] | b64decode }}"
   when: "localuser.gitaccess == true"
 
-- name: debuggin pubkey
-  ansible.builtin.debug:
-    msg: "{{ local_pubkey.stdout }}"
+
 
