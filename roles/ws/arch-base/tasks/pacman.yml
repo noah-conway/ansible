@@ -52,7 +52,7 @@
     - line: "Include = /etc/pacman.d/mirrorlist"
       insertafter: "^\\[multilib\\]"
       regexp: "Include = /etc/pacman.d/mirrorlist"
-  notify: Update pacman
+  notify: Update_pacman
 
 - name: Enabling Parallel Downloads
   become: yes
@@ -61,16 +61,9 @@
     regexp: "^#ParallelDownloads = 5"
     line: "ParallelDownloads = {{ pacman_parallel_dls }}"
   when: 'pacman_parallel_dls > 0'
-  notify: Start reflector
-
-- name: Update pacman
-  become: yes
-  community.general.pacman:
-    update_cache: true
-    upgrade: true
+  notify: Update_pacman
 
 - meta: flush_handlers
-  become: yes
 
 
 

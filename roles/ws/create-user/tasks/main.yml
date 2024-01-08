@@ -7,66 +7,15 @@
 
 - name: ansible user test
   ansible.builtin.debug:
-    msg: "{{ ansible_user_id }}"
+    msg: "{{ localuser.name }}, {{ localuser.sudo }}"
 
-- name: Creating git config file in XDG_CONFIG_HOME
-  ansible.builtin.file:
-    path: "{{ item.path }}"
-    owner: "{{ LOCALUSER }}"
-    group: "{{ LOCALUSER }}"
-    mode: "{{ item.mode }}"
-    state: "{{ item.state }}"
-    recurse: "{{ item.recurse }}"
-  when: 'XDG_CONFIG_HOME is defined'
-  loop:
-    - path: "{{ XDG_CONFIG_HOME }}/git"
-      state: directory
-      mode: '755'
-      recurse: yes
-    - path: "{{ XDG_CONFIG_HOME }}/git/config"
-      state: touch
-      mode: '644'
-      recurse: no
+- name: '----------> Creating Local User'
+  ansible.builtin.include_tasks:
+    file: create-localuser.yml
 
-- name: Configuring git username and email
-  community.general.git_config:
-    name: "{{ item.name }}"
-    value: "{{ item.value }}"
-    scope: global
-  loop:
-    - name: user.name
-      value: "{{ GIT_USER }}"
-    - name: user.email
-      value: "{{ GIT_EMAIL }}"
-
-- name: Copying git config file according to XDG directory specifications
-  ansible.builtin.copy:
-    src: "/home/{{ LOCALUSER }}/.gitconfig"
-    dest: "{{ XDG_CONFIG_HOME }}/git/config"
-    remote_src: yes
-    owner: "{{ LOCALUSER }}"
-    group: "{{ LOCALUSER }}"
-    mode: '644'
-
-
-
-# Default shell is bash: to switch to zsh, define shell: zsh in the corresponding playbook
-- name: Installing Z Shell
-  become: yes
-  ansible.builtin.package:
-    name:
-      - zsh
-      - zsh-completions
-    state: latest
-  when: '"zsh" in shell'
-
-- name: Cloning Z Shell configurations
-  ansible.builtin.git:
-    repo: "{{ GIT_URL }}/zsh.git"
-    dest: "{{ XDG_CONFIG_HOME }}"
-    clone: true
-  ignore_errors: true
-  when: '"zsh" in shell and configure == true'
+- name: '----------> Performing basic git configurations'
+  ansible.builtin.include_tasks:
+    file: git.yml
 
     
 

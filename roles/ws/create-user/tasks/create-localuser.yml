@@ -1,0 +1,32 @@
+---
+
+- name: 'Installing ZSH'
+  become: yes
+  ansible.builtin.package:
+    name:
+      - zsh
+      - zsh-completions
+    state: latest
+  when: '"zsh" is in localuser.shell'
+
+- name: 'Creating local user "{{ localuser.name }}"'
+  become: yes
+  ansible.builtin.user:
+    name: "{{ localuser.name }}"
+    shell: "/bin/{{ localuser.shell }}"
+    create_home: true
+    generate_ssh_key: "{{ localuser.sshkey }}"
+    ssh_key_type: "ed25519" 
+    ssh_key_comment: "Key for {{ localuser.name }} on {{ ansible_hostname }}"
+    
+- name: 'Adding {{ localuser.name }} to sudoers if allowed'
+  become: yes
+  ansible.builtin.user: 
+    name: "{{ localuser.name }}"
+    groups: "wheel"
+    append: true
+  
+    
+
+  
+

@@ -10,9 +10,9 @@
   ansible.builtin.debug:
     msg: "{{ ansible_user_id }}"
 
-- name: Update pacman 
-  #become: true
-  #become_user: root
+- name: Update_pacman 
+  become: yes
+    #become_user: root
   community.general.pacman:
     update_cache: true
     upgrade: true

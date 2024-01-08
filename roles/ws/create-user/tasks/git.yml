@@ -1,0 +1,50 @@
+---
+- name: Verifying git install
+  become: yes
+  ansible.builtin.package:
+    name: git
+    state: latest
+
+- name: Configuring git username and email
+  become: yes
+  become_user: "{{ localuser.name }}"
+  community.general.git_config:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    scope: global
+  loop:
+    - name: user.name
+      value: "{{ localuser.gituser }}"
+    - name: user.email
+      value: "{{ localuser.gitemail }}"
+
+- name: Copying git config file according to XDG directory specifications
+  ansible.builtin.copy:
+    src: "/home/{{ localuser.name }}/.gitconfig"
+    dest: "/home/{{ localuser.name }}/.config/git/config"
+    remote_src: yes
+    owner: "{{ localuser.name }}"
+    group: "{{ localuser.name }}"
+    mode: '644'
+
+- name: "Retrieving {{ localuser.name }}'s public key"
+  ansible.builtin.slurp:
+    src: '/home/{{ localuser.name }}/.ssh/id_ed25519.pub'
+  register: local_pubkey
+
+- name: "Retrieving {{ localuser.name }}'s public key slurptest"
+  ansible.builtin.slurp:
+    src: '/home/{{ localuser.name }}/slurptest'
+  register: slurptest
+
+- name: "Adding {{ localuser.name }}'s key to noah-conway's github account"
+  community.general.github_key:
+    name: "Access key for {{ localuser.name }}@{{ ansible_hostname }}"
+    token: '{{ github_PAT }}'
+    pubkey: local_pubkey
+  when: "localuser.gitaccess == true"
+
+- name: debuggin pubkey
+  ansible.builtin.debug:
+    msg: "{{ local_pubkey.stdout }}"
+

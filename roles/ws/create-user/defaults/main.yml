@@ -5,3 +5,5 @@ shell: "bash"
 configure: false
 XDG_CONFIG_HOME: "/home/{{ ansible_user_id }}/.config"
 
+
+
