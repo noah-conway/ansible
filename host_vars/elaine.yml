@@ -3,7 +3,11 @@ localuser:
   name: noah
   shell: zsh
   sudo: true
+  sshkey: true
+  gitaccess: true
+  gituser: Noah
+  gitemail: nconway@posteo.net
   dotfiles: true
-  git_ssh: true
+
 browser: firefox
 editor: neovim
