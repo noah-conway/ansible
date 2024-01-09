@@ -40,3 +40,7 @@
   when: out.found
   notify: Restart SSH daemon
 
+- name: post register in ssh
+  ansible.builtin.debug:
+    msg: "{{ GIT_URL }}, {{ gitaccess }}"
+

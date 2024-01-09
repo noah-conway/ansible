@@ -17,7 +17,7 @@
     create_home: true
     generate_ssh_key: "{{ localuser.sshkey }}"
     ssh_key_type: "ed25519" 
-    ssh_key_comment: "Key for {{ localuser.name }} on {{ ansible_hostname }}"
+    ssh_key_comment: "Key for {{ localuser.name }}@{{ ansible_hostname }}"
     
 - name: 'Adding {{ localuser.name }} to sudoers if allowed'
   become: yes

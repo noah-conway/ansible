@@ -1,8 +1,5 @@
-ansible_automation_user: "otto"
-XDG_CONFIG_HOME: "/home/{{ ansible_user_id }}/.config"
-GIT_USER: "noah-conway"
-GIT_EMAIL: "nconway@posteo.net"
-GIT_URL: "git@github.com:noah-conway"
+ANSIBLE_AUTOMATION_USER: "otto"
+GITHUB_URL: "{{ 'git@github.com:noah-conway' if (gitaccess is defined and 'matching_keys' is in gitaccess) else 'https://github.com/noah-conway' }} "
 ### Secret variables:
 #       localuser_default_password
 #       github_PAT
