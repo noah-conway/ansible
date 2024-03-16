@@ -54,6 +54,14 @@
       regexp: "Include = /etc/pacman.d/mirrorlist"
   notify: Update_pacman
 
+- name: "Enabling paccache package cache cleaning script"
+  become: yes
+  ansible.builtin.systemd_service:
+    name: paccache.timer
+    state: started
+    enabled: true
+  notify: Update_pacman
+
 - name: Enabling Parallel Downloads
   become: yes
   ansible.builtin.lineinfile:

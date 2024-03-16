@@ -18,16 +18,8 @@
     - name: user.email
       value: "{{ localuser.gitemail }}"
 
-- name: Copying git config file according to XDG directory specifications
-  ansible.builtin.copy:
-    src: "/home/{{ localuser.name }}/.gitconfig"
-    dest: "/home/{{ localuser.name }}/.config/git/config"
-    remote_src: yes
-    owner: "{{ localuser.name }}"
-    group: "{{ localuser.name }}"
-    mode: '644'
-
 - name: "Retrieving {{ localuser.name }}'s public key"
+  become: yes
   ansible.builtin.slurp:
     src: '/home/{{ localuser.name }}/.ssh/id_ed25519.pub'
   register: local_pubkey
@@ -39,4 +31,6 @@
     pubkey: "{{ local_pubkey['content'] | b64decode }}"
   register: gitaccess
   when: "localuser.gitaccess == true"
+
+
 

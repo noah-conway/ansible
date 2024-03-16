@@ -1,0 +1,15 @@
+---
+- ansible.builtin.assert: { that: "ansible_os_family == 'Debian'" }
+
+- name: '----------> Configuring unattended security upgrades'
+  ansible.builin.include_tasks:
+    file: unattended-upgrades.yml
+
+- name: '----------> Installing essential packages'
+  ansible.builtin.include_tasks:
+    file: install-essential-packages.yml
+
+- name: 'Locking ansible automation user'
+  ansible.builtin.user:
+    name: otto
+    password_lock: true

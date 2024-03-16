@@ -19,11 +19,27 @@
     ssh_key_type: "ed25519" 
     ssh_key_comment: "Key for {{ localuser.name }}@{{ ansible_hostname }}"
     
-- name: 'Adding {{ localuser.name }} to sudoers if allowed'
+- name: 'Creating "sudoers" group'
+  become: yes
+  ansible.builtin.group:
+    name: sudo
+    state: present
+
+- name: 'Allowing the "sudoers" group to run sudo'
+  become: yes
+  ansible.builtin.lineinfile:
+    path: /etc/sudoers
+    state: present
+    regexp: '^# %sudo ALL=ALL\(ALL:ALL\) ALL$'
+    line: '%sudo ALL=(ALL:ALL) ALL'
+    validate: '/usr/bin/visudo -cf %s'
+  when: "localuser.sudo == true"
+
+- name: 'Adding {{ localuser.name }} to sudoers'
   become: yes
   ansible.builtin.user: 
     name: "{{ localuser.name }}"
-    groups: "wheel"
+    groups: "sudo"
     append: true
   when: "localuser.sudo == true"
   

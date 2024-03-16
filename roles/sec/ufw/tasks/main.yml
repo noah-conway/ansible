@@ -1,0 +1,12 @@
+---
+- name: "Verifying UFW install"
+  become: yes
+  ansible.builtin.package:
+    name: ufw
+    status: present
+
+- name: "Setting UFW defaults: allow outgoing and deny incoming"
+  become: yes
+  community.general.ufw:
+    
+

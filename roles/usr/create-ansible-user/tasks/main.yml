@@ -1,0 +1,33 @@
+---
+- name: "Verifying automation user"
+  ansible.builtin.assert:
+    that: 
+      - "ansible_user_id == 'otto'"
+
+- name: 'Creating the automation group'
+  become: yes
+  ansible.builtin.group:
+    name: automation
+    state: present
+
+- name: 'Verifying sudo install'
+  become: yes
+  ansible.builtin.package:
+    name: sudo
+    state: present
+
+- name: 'Adding the automation group to the sudoers file'
+  become: yes
+  ansible.builtin.copy:
+    src: files/11-automation.txt
+    dest: /etc/sudoers.d/11-automation
+    validate: /usr/sbin/visudo -cf %s
+
+- name: "Adding Otto to the automation group and locking the password"
+  become: yes
+  ansible.builtin.user:
+    name: otto
+    comment: 'Otto the "otto-mated" user ;)'
+    groups: automation
+    state: present
+    password: '!'

@@ -1,0 +1,8 @@
+---
+- name: Installing essential packages
+  become: yes
+  ansible.builtin.apt:
+    name: "{{ packages_essential }}"
+    state: latest
+
+

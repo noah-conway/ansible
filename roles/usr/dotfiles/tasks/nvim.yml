@@ -1,0 +1,7 @@
+---
+- name: "Cloning neovim dotfiles from {{ git_repo }}"
+  repo: "{{ GITHUB_URL }}/neovim.git"
+  dest: "/home/{{ localuser.name }}/.config/nvim"
+  
+
+    

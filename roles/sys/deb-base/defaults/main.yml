@@ -1,0 +1,13 @@
+auto_reboot_time: '11:30' #utc
+packages_essential:
+  - build-essential
+  - nmap
+  - inetutils
+  - net-tools
+  - vim
+  - git
+  - curl
+  - wget
+  - htop
+  - iperf3
+ 

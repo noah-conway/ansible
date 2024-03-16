@@ -1,0 +1,3 @@
+# Allows a user in the automation group to execute passwordless sudo
+# For use with ansible
+%automation     ALL = (ALL:ALL) NOPASSWD: ALL

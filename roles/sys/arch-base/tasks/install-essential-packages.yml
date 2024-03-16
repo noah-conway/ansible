@@ -16,14 +16,14 @@
 
 # This allows the automation user to run pacman without password
 # For use with ansible AUR module - see that project for more info
-- name: "Allow {{ ANSIBLE_AUTOMATION_USER }} to run 'sudo pacman' without a password"
-  become: yes
-  ansible.builtin.lineinfile:
-    path: /etc/sudoers.d/11-install-aur_builder
-    line: '{{ ANSIBLE_AUTOMATION_USER }} ALL=(ALL) NOPASSWD: /usr/bin/pacman'
-    create: yes
-    mode: 0644
-    validate: 'visudo -cf %s'
+#- name: "Allow {{ ANSIBLE_AUTOMATION_USER }} to run 'sudo pacman' without a password"
+#  become: yes
+#  ansible.builtin.lineinfile:
+#    path: /etc/sudoers.d/11-install-aur_builder
+#    line: '{{ ANSIBLE_AUTOMATION_USER }} ALL=(ALL) NOPASSWD: /usr/bin/pacman'
+#    create: yes
+#    mode: 0644
+#    validate: 'visudo -cf %s'
 
 
 - name: Installing "{{ helper }}" aur helper

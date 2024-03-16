@@ -1,9 +1,6 @@
 ---
 - ansible.builtin.assert: { that: "ansible_os_family == 'Archlinux'" }
 
-- ansible.builtin.debug:
-    msg: 'aau: {{ ansible_user_id }}'
-
 - name: '----------> Loading Microcode'
   ansible.builtin.include_tasks:
     file: load-microcode.yml
@@ -15,6 +12,11 @@
 - name: '----------> Installing essential packages and configure AUR'
   ansible.builtin.include_tasks:
     file: install-essential-packages.yml
+
+- name: 'Locking ansible automation user'
+  ansible.builtin.user:
+    name: otto
+    password_lock: true
 
 
 
