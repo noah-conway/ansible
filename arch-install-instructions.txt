@@ -26,6 +26,8 @@
 
     format EFI boot partition to FAT32
         $ mkfs.fat -F 32 /dev/*efi*
+    Make swap on swap partition
+        $ mkswap /dev/*swap*
 
     to encrypt the root partition:
         $ cryptsetup luksFormat /dev/*root*
@@ -38,6 +40,7 @@
     $ mount /dev/mapper/root /mnt
     $ mkdir /mnt/boot
     $ mount /dev/sda1 /mnt/boot
+    $ swapon /dev/*swap*
     $ lsblk -l #verify
 
 - PACSTRAP
@@ -124,4 +127,29 @@
 - time to reboot! exit the chroot and:
     $ umount -R /mnt
     $ reboot
+
+- adding the ansible automation user
+  First create the "automation" group:
+    $ groupadd automation
+
+  Then, allow the "automation" group to run sudo without a password using:
+    $ visudo -f /etc/sudoers.d/11-automation
+
+  Add the following line into the file:
+      # Allows a user in the automation group to execute passwordless sudo
+      # For use with ansible
+      %automation     ALL = (ALL:ALL) NOPASSWD: ALL
+
+  Then, create the user:
+    $ useradd -m -G automation -c "Otto the "otto-mated" user" otto
+
+  You will need to assign a password to otto to copy the ssh keys.
+    $ passwd otto
+
+  go to the host machine, and run
+    $ ssh-copy-id -i ~/.ssh/myKey otto@10.ip.of.server
         
+  To then lock Otto from logging in, run:
+    $ usermod -l otto
+
+    make sure to start/enable sshd

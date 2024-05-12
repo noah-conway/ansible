@@ -1,10 +1,9 @@
 pkgs_nonessential:
   - thunderbird
   - bitwarden
-  - sxiv
+  - wireguard-tools
   - imagemagick
   - exiv2
-  - audacity
   - bluez
   - bluez-utils
   - cups

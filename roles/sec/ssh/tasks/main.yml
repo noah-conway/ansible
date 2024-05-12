@@ -44,7 +44,7 @@
   become: yes
   lineinfile:
     dest: /etc/ssh/sshd_config.d/10-ansible-ssh-configs.conf
-    line: "DisableForwading yes"
+    line: "DisableForwarding yes"
     insertafter: "EOF"
     state: present
     create: true
