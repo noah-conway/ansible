@@ -1,0 +1,6 @@
+---
+- hosts: AVM
+  remote_user: root
+
+  roles:
+    - role: ws/create-ansible-user

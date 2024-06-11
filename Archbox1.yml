@@ -1,0 +1,6 @@
+---
+- hosts: Archbox1
+  
+  roles:
+    - role: ws/arch-base
+    - role: ws/create-user

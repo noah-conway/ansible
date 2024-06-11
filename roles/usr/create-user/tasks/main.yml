@@ -5,17 +5,9 @@
 
 # Edits the $XDG_CONFIG_HOME/.gitconfig file insteat f "git config..." commands: this ensures that this module runs even if git is not currently installed
 
-- name: ansible user test
-  ansible.builtin.debug:
-    msg: "{{ localuser.name }}, {{ localuser.sudo }}"
-
 - name: '----------> Creating Local User'
   ansible.builtin.include_tasks:
-    file: create-localuser.yml
-
-- name: '----------> Performing basic git configurations'
-  ansible.builtin.include_tasks:
-    file: git.yml
+    file: create.yml
 
     
 

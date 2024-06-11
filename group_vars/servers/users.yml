@@ -1,0 +1,21 @@
+---
+users:
+  - username: "noah"
+    password: "3-uP&7"
+    shell: zsh
+    create_ssh_key: true
+    sudo: true
+    git_auth: true
+    user_state: present
+    dotfiles:
+      - tmux
+      - neovim
+      - zsh
+
+  - username: "test"
+    password: "X3on432"
+    create_ssh_key: false
+    user_state: present
+    dotfiles:
+      - tmux 
+

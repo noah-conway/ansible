@@ -1,36 +1,48 @@
 ---
-- name: Verifying git install
-  become: yes
-  ansible.builtin.package:
-    name: git
-    state: latest
+- name: "Configuring git | adding git user.name"
+  ansible.builtin.file:
+    path: "/home/{{ item.username }}/.config/git"
+    owner: "{{ item.username }}"
+    group: "{{ item.username }}"
+    mode: "0755"
+    state: directory
 
-- name: Configuring git username and email
-  become: yes
-  become_user: "{{ localuser.name }}"
-  community.general.git_config:
-    name: "{{ item.name }}"
-    value: "{{ item.value }}"
-    scope: global
-  loop:
-    - name: user.name
-      value: "{{ localuser.gituser }}"
-    - name: user.email
-      value: "{{ localuser.gitemail }}"
+- name: "Configuring git | adding git user.name"
+  ansible.builtin.file:
+    path: "/home/{{ item.username }}/.config/git/config"
+    owner: "{{ item.username }}"
+    group: "{{ item.username }}"
+    mode: "0644"
+    state: touch
 
-- name: "Retrieving {{ localuser.name }}'s public key"
+- name: "Configuring git | adding git user.name"
+  ansible.builtin.lineinfile:
+    path: "/home/{{ item.username }}/.config/git/config"
+    line: "[user]"
+    insertafter: "EOF"
+
+- name: "Configuring git | adding git user.email"
+  ansible.builtin.lineinfile:
+    path: "/home/{{ item.username }}/.config/git/config"
+    insertafter: '^\[user\]$'
+    line: " email = {{ git_email }}"
+
+- name: "Configuring git | adding git user.name"
+  ansible.builtin.lineinfile:
+    path: "/home/{{ item.username }}/.config/git/config"
+    insertafter: '^\[user\]$'
+    line: " name = {{ git_username }}"
+    #  when: "item.git_auth|d(false)|bool == true"
+- name: "Retrieving {{ item.username }}'s public key"
   become: yes
   ansible.builtin.slurp:
-    src: '/home/{{ localuser.name }}/.ssh/id_ed25519.pub'
+    src: '/home/{{ item.username }}/.ssh/{{ git_pubkey }}.pub'
   register: local_pubkey
 
-- name: "Adding {{ localuser.name }}'s key to noah-conway's github account"
+- name: "Adding {{ item.username }}'s key to {{ git_username }}'s github account"
   community.general.github_key:
-    name: "Access key for {{ localuser.name }}@{{ ansible_hostname }}"
+    name: "Access key for {{ item.username }}@{{ ansible_hostname }}"
     token: "{{ github_PAT }}"
     pubkey: "{{ local_pubkey['content'] | b64decode }}"
-  register: gitaccess
-  when: "localuser.gitaccess == true"
-
 
 

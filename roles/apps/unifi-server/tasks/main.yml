@@ -6,7 +6,7 @@
       - apt-transport-https
     update_cache: yes
     state: present
-    become: yes
+  become: yes
 
 - name: "Deploying unifi server | testing"
   block:
@@ -14,20 +14,29 @@
       ansible.builtin.get_url:
         url: "https://dl.ui.com/unifi/unifi-repo.gpg"
         dest: "/etc/apt/trusted.gpg.d/unifi-repo.gpg"
+      become: yes
 
     - name: "unifirepo | apt source"
       ansible.builtin.apt_repository:
         repo: "deb [ arch=amd64,arm64 ] https://www.ui.com/downloads/unifi/debian stable ubiquiti"
         filename: "/etc/apt/sources.list.d/100-ubnt-unifi.list"
         state: present
+        update_cache: yes
+      become: yes
 
 - name: "Deploying UniFi server | Installing UniFi server"
   ansible.builtin.apt:
     name: unifi
     update_cache: yes
     state: present
-    become: yes
+  become: yes
 
+- name: "Deploying UniFi Server | starting server"
+  ansible.builtin.systemd_service:
+    name: unifi
+    state: started
+    enabled: true
+    
 
       
 

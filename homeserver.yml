@@ -1,0 +1,5 @@
+---
+- hosts: peterman
+
+  roles:
+    - ws/create-ansible-user

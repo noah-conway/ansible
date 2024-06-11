@@ -1,9 +1,7 @@
-GIT_USER: vagrant
-GIT_EMAIL: vagrant@vagrant.com
-LOCALUSER: vagrant
-shell: "bash"
-configure: false
-XDG_CONFIG_HOME: "/home/{{ ansible_user_id }}/.config"
-
+git_username: nconway
+git_email: nconway@posteo.net
+git_pubkey: "id_ed25519"
+default_shell: "bash"
+users: {}
 
 
