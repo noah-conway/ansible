@@ -12,6 +12,10 @@
     state: absent
   become: yes
 
+- name: Set DPKG architecture
+  set_fact:
+    dpkg_arch: "{{ 'amd64' if ansible_architecture == 'x86_64' else ansible_architecture }}"
+
 - name: "Installing Docker | Adding Apt Repository" 
   block:
     - name: "Installing Docker | Adding Apt Repository | Adding GPG Key"
@@ -23,7 +27,7 @@
 
     - name: "Installing Docker | Adding Apt Repository | Adding Repo"
       ansible.builtin.apt_repository:
-        repo: 'deb [arch={{ ansible_architecture }} signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable'
+        repo: 'deb [arch={{ dpkg_arch }} signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable'
         filename: "/etc/apt/sources.list.d/docker.list"
         update_cache: yes
         state: present
