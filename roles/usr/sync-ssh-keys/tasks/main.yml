@@ -1,0 +1,31 @@
+---
+- name: "Verifying OpenSSH install"
+  ansible.builtin.package:
+    name: openssh
+    state: present
+
+- name: "Verifying .ssh directory exists"
+  ansible.builtin.file:
+    path: "/home/{{ target_user }}/.ssh"
+    state: directory
+    mode: '0700'
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
+
+- name: "Verifying .ssh directory exists"
+  ansible.builtin.file:
+    path: "/home/{{ target_user }}/.ssh/authorized_keys"
+    state: touch
+    mode: '0600'
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
+
+- name: "Importing SSH keys from the workstations group"
+  ansible.builtin.lineinfile:
+    path: "/home/{{ target_user }}/.ssh/authorized_keys"
+    create: yes
+    line: "{{ item }}"
+    state: present
+  loop: "{{ workstation_ssh_keys }}"
+
+  
