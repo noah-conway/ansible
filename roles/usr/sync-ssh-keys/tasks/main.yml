@@ -1,5 +1,5 @@
 ---
-- name: "Verifying .ssh directory exists"
+- name: "Verifying .ssh directory exists for {{ target_user }}"
   become: yes
   ansible.builtin.file:
     path: "/home/{{ target_user }}/.ssh"
@@ -8,7 +8,7 @@
     owner: "{{ target_user }}"
     group: "{{ target_user }}"
 
-- name: "Verifying .ssh directory exists"
+- name: "Verifying authorized_key file exists for {{ target_user }}"
   become: yes
   ansible.builtin.file:
     path: "/home/{{ target_user }}/.ssh/authorized_keys"
@@ -17,7 +17,7 @@
     owner: "{{ target_user }}"
     group: "{{ target_user }}"
 
-- name: "Importing SSH keys from the workstations group"
+- name: "Importing SSH keys from the workstations group to {{ target_user }}"
   become: yes
   ansible.builtin.lineinfile:
     path: "/home/{{ target_user }}/.ssh/authorized_keys"
