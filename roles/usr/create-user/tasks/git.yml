@@ -1,5 +1,6 @@
 ---
 - name: "Configuring git | adding git user.name"
+  become: yes
   ansible.builtin.file:
     path: "/home/{{ item.username }}/.config/git"
     owner: "{{ item.username }}"
@@ -8,6 +9,7 @@
     state: directory
 
 - name: "Configuring git | adding git user.name"
+  become: yes
   ansible.builtin.file:
     path: "/home/{{ item.username }}/.config/git/config"
     owner: "{{ item.username }}"
@@ -16,18 +18,21 @@
     state: touch
 
 - name: "Configuring git | adding git user.name"
+  become: yes
   ansible.builtin.lineinfile:
     path: "/home/{{ item.username }}/.config/git/config"
     line: "[user]"
     insertafter: "EOF"
 
 - name: "Configuring git | adding git user.email"
+  become: yes
   ansible.builtin.lineinfile:
     path: "/home/{{ item.username }}/.config/git/config"
     insertafter: '^\[user\]$'
     line: " email = {{ git_email }}"
 
 - name: "Configuring git | adding git user.name"
+  become: yes
   ansible.builtin.lineinfile:
     path: "/home/{{ item.username }}/.config/git/config"
     insertafter: '^\[user\]$'

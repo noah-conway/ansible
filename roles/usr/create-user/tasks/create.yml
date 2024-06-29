@@ -7,6 +7,7 @@
   when: item.shell is defined
 
 - name: "Installing ZSH"
+  become: yes
   ansible.builtin.package:
     name: 
       - zsh
@@ -29,6 +30,7 @@
     validate: '/usr/sbin/visudo -cf %s'
 
 - name: "creating users from loop"
+  become: yes
   ansible.builtin.user:
     name: "{{ item.username }}"
       #id: " {{ item.uid | default(omit, True) }}"
@@ -44,6 +46,7 @@
     label: "{{ item.username }}"
  
 - name: "Adding sudo users"
+  become: yes
   ansible.builtin.user:
     name: "{{ item.username }}"
     groups: sudo
@@ -54,6 +57,7 @@
     label: "{{ item.username }}"
     
 - name: Verifying git install
+  become: yes
   ansible.builtin.package:
     name: git
     state: latest

@@ -1,0 +1,19 @@
+---
+- hosts: deb-vm-2
+  vars_files:
+    - group_vars/servers/users.yml
+    - group_vars/all/workstation-ssh-keys.secret
+
+  vars:
+    #target_user: noah
+
+  roles:
+    #  - role: usr/create-user
+    - role: usr/sync-ssh-keys
+      vars:
+        target_user: otto
+    - role: usr/sync-ssh-keys
+      vars:
+        target_user: noah
+    #- role: usr/create-user
+    - role: apps/docker
