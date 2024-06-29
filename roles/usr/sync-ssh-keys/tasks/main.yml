@@ -16,7 +16,7 @@
   ansible.builtin.file:
     path: "/home/{{ target_user }}/.ssh/authorized_keys"
     state: touch
-    mode: '0600'
+    mode: '0644'
     owner: "{{ target_user }}"
     group: "{{ target_user }}"
 
