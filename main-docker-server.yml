@@ -5,6 +5,8 @@
 
   become: yes
 
+
   roles:
+    - role: nextcloud.admin.install_nextcloud
     #- role: usr/create-user
     - role: apps/docker

@@ -4,7 +4,6 @@ Archbox1 ansible_host=192.168.1.136 ansible_user=otto ansible_connection=ssh ans
 [uboxes]
 jerry ansible_host=192.168.0.118 ansible_user=noah ansible_connection=ssh ansible_ssh_private_key_file=~/.ssh/jerry
 
-[vms]
-peterman ansible_host=10.10.26.11 ansible_user=otto ansible_connection=ssh ansible_ssh_private_key_file=~/.ssh/noah-newman
-deb-vm-2 ansible_host=10.10.26.210 ansible_user=otto ansible_connection=ssh ansible_ssh_private_key_file=~/.ssh/noah-elaine.pub
+[deboxes]
+deb-test-vm-300 ansible_host=10.10.26.135 ansible_user=otto ansible_connection=ssh ansible_ssh_private_key_file=~/.ssh/noah-elaine
 

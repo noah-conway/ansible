@@ -1,0 +1,7 @@
+---
+- name: "debugging git"
+  ansible.builtin.debug:
+    msg: "git url: {{ GITHUB_URL }}"
+
+
+

@@ -22,6 +22,7 @@
   ansible.builtin.lineinfile:
     path: "/home/{{ item.username }}/.config/git/config"
     line: "[user]"
+    state: present
     insertafter: "EOF"
 
 - name: "Configuring git | adding git user.email"
@@ -44,10 +45,14 @@
     src: '/home/{{ item.username }}/.ssh/{{ git_pubkey }}.pub'
   register: local_pubkey
 
-- name: "Adding {{ item.username }}'s key to {{ git_username }}'s github account"
-  community.general.github_key:
-    name: "Access key for {{ item.username }}@{{ ansible_hostname }}"
-    token: "{{ github_PAT }}"
-    pubkey: "{{ local_pubkey['content'] | b64decode }}"
+- name: "Changing GIT_URL to ssh"
+  ansible.builtin.set_fact: GITHUB_URL="git@github.com:noah-conway/"
+  
+
+  #- name: "Adding {{ item.username }}'s key to {{ git_username }}'s github account"
+  #community.general.github_key:
+  #  name: "Access key for {{ item.username }}@{{ ansible_hostname }}"
+  #  token: "{{ github_PAT }}"
+  #  pubkey: "{{ local_pubkey['content'] | b64decode }}"
 
 

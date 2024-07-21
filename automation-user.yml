@@ -1,0 +1,14 @@
+---
+- name: "Creating the 'otto' automation user"
+  hosts: deb-test-vm-300
+  become: true
+  vars_files:
+    - group_vars/all/workstation-ssh-keys.secret
+      
+
+  vars:
+    target_user: otto
+
+  roles:
+    - usr/sync-ssh-keys
+
