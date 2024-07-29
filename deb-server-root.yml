@@ -1,0 +1,16 @@
+---
+- name: "Provisioning a debian server"
+  become: yes
+  hosts: cloud2
+
+  tasks:
+    - name: "Print IP"
+      debug:
+        msg: "Server IP: {{ ansible_default_ipv4.address }}"
+
+    - name: "Print user"
+      debug:
+        msg: "ansible user: {{ ansible_user_id }}"
+
+
+  

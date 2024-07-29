@@ -1,6 +1,6 @@
 ---
 - name: "Creating the 'otto' automation user"
-  hosts: deb-test-vm-300
+  hosts: deboxes
   become: true
   vars_files:
     - group_vars/all/workstation-ssh-keys.secret

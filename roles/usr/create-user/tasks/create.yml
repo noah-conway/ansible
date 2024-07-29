@@ -1,10 +1,17 @@
 ---
-
-- name: "Check for zsh shell" 
-  set_fact:
-    has_zsh_user: "{{ has_zsh_user | default(false) or (item.shell == 'zsh') }}"
-  loop: "{{ users }}"
-  when: item.shell is defined
+# This role creates a single user, defines as a dictionary in the form:
+# user:
+#   username: 
+#   password:
+#   shell:
+#   create_ssh_key:
+#   sudo:
+#   dotfiles:
+#     - app
+#     - app
+#   user: state
+#   change_password:
+#
 
 - name: "Installing ZSH"
   become: yes
@@ -12,13 +19,14 @@
     name: 
       - zsh
     state: present
-  when: 'has_zsh_user == true'
+  when: 'user.shell is defined and user.shell == "zsh"'
 
 - name: 'Creating "sudoers" group'
   become: yes
   ansible.builtin.group:
     name: sudo
     state: present
+  when: "user.sudo == true"
 
 - name: 'Allowing the "sudoers" group to run sudo'
   become: yes
@@ -28,33 +36,34 @@
     regexp: '^# %sudo ALL=ALL\(ALL:ALL\) ALL$'
     line: '%sudo ALL=(ALL:ALL) ALL'
     validate: '/usr/sbin/visudo -cf %s'
+  when: "user.sudo == true"
 
-- name: "creating users from loop"
+- name: "Create user"
   become: yes
   ansible.builtin.user:
-    name: "{{ item.username }}"
+    name: "{{ user.username }}"
       #id: " {{ item.uid | default(omit, True) }}"
-    password: "{{ item.password }}"
-    shell: "/bin/{{ item.shell if item.shell is defined else default_shell }}"
+    shell: "/bin/{{ user.shell if user.shell is defined else default_shell }}"
     createhome: true
-    generate_ssh_key: "{{ item.create_ssh_key | default(False) }}"
+    generate_ssh_key: "{{ user.create_ssh_key | default(False) }}"
     ssh_key_type: "ed25519"
-    ssh_key_comment: "Key for {{ item.username }}@{{ ansible_hostname }}"
-    state: "{{ item.user_state }}"
-  loop: "{{ users }}"
-  loop_control:
-    label: "{{ item.username }}"
+    ssh_key_comment: "Key for {{ user.username }}@{{ ansible_hostname }}"
+    state: "{{ user.state }}"
+
+- name: "Assigning user password"
+  become: yes
+  ansible.builtin.user:
+    name: "{{ user.username }}"
+    password: "{{ user.password }}"
+  when: "user.overwrite_password == true"
  
 - name: "Adding sudo users"
   become: yes
   ansible.builtin.user:
-    name: "{{ item.username }}"
+    name: "{{ user.username }}"
     groups: sudo
     append: true
-  when: "item.sudo|d(false)|bool == true"
-  loop: "{{ users }}"
-  loop_control:
-    label: "{{ item.username }}"
+  when: "user.sudo == true"
     
 - name: Verifying git install
   become: yes
@@ -64,11 +73,7 @@
 
 - name: "Configuring Git"
   ansible.builtin.include_tasks: git.yml
-  when: "item.git_auth|d(false)|bool == true"
-  loop: "{{ users }}"
+  when: "user.git_auth == true"
 
-- name: "adding dotfiles"
-  ansible.builtin.include_tasks: dotfiles.yml
-  loop: "{{ users }}"
 
 

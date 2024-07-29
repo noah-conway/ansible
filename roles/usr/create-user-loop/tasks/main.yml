@@ -1,0 +1,15 @@
+# This module is a catch-all for basic user configurations
+# Configures git user and email, and configures shell according to specifications
+#
+# Git user and email defaults to null values, which means the modules won't run by default. Define these variables elsewhere 
+
+# Edits the $XDG_CONFIG_HOME/.gitconfig file insteat f "git config..." commands: this ensures that this module runs even if git is not currently installed
+
+- name: '----------> Creating Local User'
+  ansible.builtin.include_tasks:
+    file: create.yml
+
+    
+
+
+

@@ -1,0 +1,7 @@
+git_username: nconway
+git_email: nconway@posteo.net
+git_pubkey: "id_ed25519"
+default_shell: "bash"
+users: {}
+
+

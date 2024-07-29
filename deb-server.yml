@@ -1,17 +1,30 @@
 ---
-- hosts: deboxes
+- name: "Provisioning a debian server"
+  hosts: deboxes
+  vars_prompt:
+    - name: "overwrite_password"
+      prompt: "Enter a new password and overwrite the old? t/F"
+
+    - name: "prompt_password"
+      prompt: "Enter a password for noah"
+      private: yes
+
   vars_files:
-    - group_vars/servers/users.yml
     - group_vars/all/workstation-ssh-keys.secret
 
   roles:
+    - role: sec/ssh
     - role: usr/create-user
-    # - role: nextcloud.admin.install_nextcloud
-    # - role: usr/sync-ssh-keys
-    #  vars:
-    #    target_user: otto
-    #- role: usr/sync-ssh-keys
-    #  vars:
-    #    target_user: noah
-    #- role: usr/create-user
-    #    - role: apps/docker
+      vars:
+        user:
+          username: noah
+          password: "{{ prompt_password | password_hash('sha512') }}"
+          create_ssh_key: true
+          sudo: true
+          state: present
+          git_auth: false
+          overwrite_password: overwrite_password
+          
+    - role: usr/sync-ssh-keys
+      vars:
+        target_user: noah

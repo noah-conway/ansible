@@ -1,0 +1,74 @@
+---
+
+- name: "Check for zsh shell" 
+  set_fact:
+    has_zsh_user: "{{ has_zsh_user | default(false) or (item.shell == 'zsh') }}"
+  loop: "{{ users }}"
+  when: item.shell is defined
+
+- name: "Installing ZSH"
+  become: yes
+  ansible.builtin.package:
+    name: 
+      - zsh
+    state: present
+  when: 'has_zsh_user == true'
+
+- name: 'Creating "sudoers" group'
+  become: yes
+  ansible.builtin.group:
+    name: sudo
+    state: present
+
+- name: 'Allowing the "sudoers" group to run sudo'
+  become: yes
+  ansible.builtin.lineinfile:
+    path: /etc/sudoers
+    state: present
+    regexp: '^# %sudo ALL=ALL\(ALL:ALL\) ALL$'
+    line: '%sudo ALL=(ALL:ALL) ALL'
+    validate: '/usr/sbin/visudo -cf %s'
+
+- name: "creating users from loop"
+  become: yes
+  ansible.builtin.user:
+    name: "{{ item.username }}"
+      #id: " {{ item.uid | default(omit, True) }}"
+    password: "{{ item.password }}"
+    shell: "/bin/{{ item.shell if item.shell is defined else default_shell }}"
+    createhome: true
+    generate_ssh_key: "{{ item.create_ssh_key | default(False) }}"
+    ssh_key_type: "ed25519"
+    ssh_key_comment: "Key for {{ item.username }}@{{ ansible_hostname }}"
+    state: "{{ item.user_state }}"
+  loop: "{{ users }}"
+  loop_control:
+    label: "{{ item.username }}"
+ 
+- name: "Adding sudo users"
+  become: yes
+  ansible.builtin.user:
+    name: "{{ item.username }}"
+    groups: sudo
+    append: true
+  when: "item.sudo|d(false)|bool == true"
+  loop: "{{ users }}"
+  loop_control:
+    label: "{{ item.username }}"
+    
+- name: Verifying git install
+  become: yes
+  ansible.builtin.package:
+    name: git
+    state: latest
+
+- name: "Configuring Git"
+  ansible.builtin.include_tasks: git.yml
+  when: "item.git_auth|d(false)|bool == true"
+  loop: "{{ users }}"
+
+- name: "adding dotfiles"
+  ansible.builtin.include_tasks: dotfiles.yml
+  loop: "{{ users }}"
+
+

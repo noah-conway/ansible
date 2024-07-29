@@ -1,0 +1,43 @@
+---
+- name: "Provisioning the LXC containers on Proxmox as defined in the Ansible inventory file" 
+  hosts: lxc
+  gather_facts: false
+
+  tasks:
+    - name: "Retrieving ssh public key from local system"
+      become: no
+      delegate_to: 127.0.0.1
+      ansible.builtin.slurp:
+        src: "~/.ssh/noah-elaine.pub"
+      register: ssh_pub_key
+
+    - name: "Provisioning LXC containers on Proxmox node {{ proxmox_host }}"
+      delegate_to: 127.0.0.1
+      community.general.proxmox:
+        api_user: "{{ proxmox_user }}@pam"
+        api_password: "{{ proxmox_pass }}"
+        api_host: "{{ proxmox_host }}"
+        vmid: "{{ vmid }}"
+        memory: "{{ memory }}"
+        cpus: "{{ cpus }}"
+        netif: '{"net0":"name={{ proxmox_netif }},ip={{ ansible_host }}/{{ subnet_mask }},gw={{ gateway }},bridge={{ proxmox_netbridge }}"}'
+        password: "{{ proxmox_lxc_default_pass }}"
+        hostname: "{{ inventory_hostname }}"
+        storage: "{{ proxmox_vm_storage }}"
+        node: "{{ proxmox_node }}"
+        ostemplate: "{{ proxmox_template_storage }}/{{ ostemplate }}"
+        timeout: 300
+        pubkey: "{{ ssh_pub_key['content'] | b64decode }}"
+        onboot: true
+        state: present
+
+    - name: "Starting LXC containers on Proxmox node {{ proxmox_host }}"
+      delegate_to: 127.0.0.1
+      community.general.proxmox:
+        node: "pve"
+        vmid: "{{ vmid }}"
+        api_user: "{{ proxmox_user }}@pam"
+        api_password: "{{ proxmox_pass }}"
+        api_host: "{{ proxmox_host }}"
+        state: started
+

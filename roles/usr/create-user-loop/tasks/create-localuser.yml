@@ -1,0 +1,49 @@
+---
+
+- name: 'Installing ZSH'
+  become: yes
+  ansible.builtin.package:
+    name:
+      - zsh
+      - zsh-completions
+    state: latest
+  when: '"zsh" is in localuser.shell'
+
+- name: 'Creating local user "{{ localuser.name }}"'
+  become: yes
+  ansible.builtin.user:
+    name: "{{ localuser.name }}"
+    shell: "/bin/{{ localuser.shell }}"
+    create_home: true
+    generate_ssh_key: "{{ localuser.sshkey }}"
+    ssh_key_type: "ed25519" 
+    ssh_key_comment: "Key for {{ localuser.name }}@{{ ansible_hostname }}"
+    
+- name: 'Creating "sudoers" group'
+  become: yes
+  ansible.builtin.group:
+    name: sudo
+    state: present
+
+- name: 'Allowing the "sudoers" group to run sudo'
+  become: yes
+  ansible.builtin.lineinfile:
+    path: /etc/sudoers
+    state: present
+    regexp: '^# %sudo ALL=ALL\(ALL:ALL\) ALL$'
+    line: '%sudo ALL=(ALL:ALL) ALL'
+    validate: '/usr/bin/visudo -cf %s'
+  when: "localuser.sudo == true"
+
+- name: 'Adding {{ localuser.name }} to sudoers'
+  become: yes
+  ansible.builtin.user: 
+    name: "{{ localuser.name }}"
+    groups: "sudo"
+    append: true
+  when: "localuser.sudo == true"
+  
+    
+
+  
+

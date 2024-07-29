@@ -1,0 +1,8 @@
+---
+- name: "testing ansible host IP addressing scheme"
+  hosts: cloud
+  gather_facts: false
+  tasks:
+    - name: "display IPv4 addr in CIDR notation"
+      debug:
+        msg: "{{ ansible_facts['default_ipv4']['address'] }}/{{ ansible_facts['default_ipv4']['network'] | ipaddr('prefix') }}"
