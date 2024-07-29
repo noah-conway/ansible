@@ -1,0 +1,29 @@
+---
+- name: "Deploying Syncthing | adding release pgp keys | ensuring keyring directory exists"
+  become: yes
+  ansible.builtin.file:
+    path: "/etc/apt/keyrings"
+
+- name: "Deploying Syncthing | adding release pgp keys | adding key"
+  become: yes
+  ansible.builtin.get_url:
+    url: "https://syncthing.net/release-key.gpg"
+    dest: "/etc/apt/keyrings/syncthing-archive-keyring.gpg"
+
+- name: "Deploying Syncthing | adding release apt key"
+  become: yes
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/etc/apt/keyrings/syncthing-archive-keyring.gpg] https://apt.syncthing.net/ syncthing {{ release_ver }}"
+    filename: "/etc/apt/sources.list.d/syncthing.list"
+    state: present
+    update_cache: yes
+
+- name: "Deploying Syncthing | installing Syncthing"
+  become: yes
+  ansible.builtin.apt:
+    name: syncthing
+    update_cache: yes
+    state: present
+    
+
+

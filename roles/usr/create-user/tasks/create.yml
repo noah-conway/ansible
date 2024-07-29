@@ -42,6 +42,8 @@
   become: yes
   ansible.builtin.user:
     name: "{{ user.username }}"
+    password: "{{ user.password }}"
+    update_password: on_create
       #id: " {{ item.uid | default(omit, True) }}"
     shell: "/bin/{{ user.shell if user.shell is defined else default_shell }}"
     createhome: true
@@ -50,13 +52,6 @@
     ssh_key_comment: "Key for {{ user.username }}@{{ ansible_hostname }}"
     state: "{{ user.state }}"
 
-- name: "Assigning user password"
-  become: yes
-  ansible.builtin.user:
-    name: "{{ user.username }}"
-    password: "{{ user.password }}"
-  when: "user.overwrite_password == true"
- 
 - name: "Adding sudo users"
   become: yes
   ansible.builtin.user:

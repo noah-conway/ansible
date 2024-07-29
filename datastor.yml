@@ -1,0 +1,6 @@
+---
+- name: "Provisioning a debian server"
+  hosts: datastor
+
+  roles:
+    - role: apps/syncthing

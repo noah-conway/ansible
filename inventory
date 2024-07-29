@@ -11,7 +11,7 @@ deb-test-vm-300 ansible_host=10.10.26.135 ansible_connection=ssh ansible_ssh_pri
 deb-test-vm-301 ansible_host=10.10.26.231 ansible_connection=ssh ansible_ssh_private_key_file=~/.ssh/noah-elaine
 
 [cloud]
-cloudserver ansible_host=10.10.26.11 ansible_user=root ansible_connection=ssh ansible_ssh_private_key_file=~/.ssh/noah-elaine
+datastor ansible_host=10.10.26.11 ansible_user=otto ansible_connection=ssh ansible_ssh_private_key_file=~/.ssh/noah-newman
 
 [lxc]
 ansitest ansible_host=10.10.26.226 subnet_mask=24 gateway=10.10.26.1 ansible_user=otto ansible_connection=ssh ansible_ssh_private_key_file=~/.ssh/noah-elaine vmid=500 memory=1024 disk_size=32 cpus=2 ostemplate="debian-12-standard_12.2-1_amd64.tar.zst"
