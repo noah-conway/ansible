@@ -1,8 +1,7 @@
 ---
-- name: "Provisioning the LXC containers on Proxmox as defined in the Ansible inventory file" 
-  hosts: lxc
+- name: "Provisioning the vms containers on Proxmox as defined in the Ansible inventory file" 
+  hosts: vms
   gather_facts: false
-  become: yes
 
   tasks:
     - name: "Retrieving ssh public key from local system"
@@ -24,7 +23,7 @@
         netif: '{"net0":"name={{ proxmox_netif }},ip={{ ansible_host }}/{{ subnet_mask }},gw={{ gateway }},bridge={{ proxmox_netbridge }}"}'
         password: "{{ proxmox_lxc_default_pass }}"
         hostname: "{{ inventory_hostname }}"
-        disk: "{{ proxmox_vm_storage }}:{{ disk_size }}"
+        storage: "{{ proxmox_vm_storage }}"
         node: "{{ proxmox_node }}"
         ostemplate: "{{ proxmox_template_storage }}/{{ ostemplate }}"
         timeout: 300
@@ -42,6 +41,3 @@
         api_host: "{{ proxmox_host }}"
         state: started
 
-  roles:
-    - role: usr/create-ansible-user
-      become_user: root
