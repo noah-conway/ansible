@@ -7,21 +7,21 @@
   block:
     - name: "Removing existing GPG key | ensuring correct key is used"
       ansible.builtin.file:
-        path: "/usr/share/keyrings/mongodb-server-7.0.gpg"
+        path: "/usr/share/keyrings/mongodb-server-{{ MongoDB_version }}.gpg"
         state: absent
       become: yes
 
     - name: "Adding GPG key"
       ansible.builtin.get_url:
-        url: "https://www.mongodb.org/static/pgp/server-7.0.asc"
-        dest: "/usr/share/keyrings/mongodb-server-7.0.asc"
+        url: "https://www.mongodb.org/static/pgp/server-{{ MongoDB_version }}.asc"
+        dest: "/usr/share/keyrings/mongodb-server-{{ MongoDB_version }}.asc"
         mode: 0644
       become: yes
 
     - name: "Adding MongoDB repository"
       ansible.builtin.apt_repository:
-        repo: 'deb [ signed-by=/usr/share/keyrings/mongodb-server-7.0.asc ] http://repo.mongodb.org/apt/debian bookworm/mongodb-org/7.0 main'
-        filename: "mongodb-org-7.0.list"
+        repo: 'deb [ signed-by=/usr/share/keyrings/mongodb-server-{{ MongoDB_version }}.asc ] http://repo.mongodb.org/apt/debian bookworm/mongodb-org/{{ MongoDB_version }} main'
+        filename: "mongodb-org-{{ MongoDB_version }}.list"
         update_cache: yes
         state: present
       become: yes
