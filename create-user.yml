@@ -1,0 +1,11 @@
+---
+- name: "Testing user loop role"
+  remote_user: otto
+  hosts: ansitest
+
+  vars_files:
+    - group_vars/servers/users.yml
+
+  roles:
+    - role: usr/create-user-loop
+

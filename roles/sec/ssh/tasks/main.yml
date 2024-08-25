@@ -8,16 +8,14 @@
   changed_when: false
   register: dir
 
-- name: Disabling password authentication for SSH
+- name: "Creating ansible ssh config file"
   become: yes
-  lineinfile:
-    dest: /etc/ssh/sshd_config.d/10-ansible-ssh-configs.conf
-    line: "PasswordAuthentication no"
-    insertafter: "EOF"
-    state: present
-    create: true
-  when: dir.found
-  notify: Restart SSH daemon
+  ansible.builtin.file:
+    path: /etc/ssh/sshd_config.d/10-ansible-ssh-configs.conf
+    owner: "root"
+    group: "root"
+    mode: '644'
+    state: touch
 
 - name: Enabling public key authentication for SSH
   become: yes
@@ -26,6 +24,17 @@
     line: "AuthenticationMethods publickey"
     insertafter: "EOF"
     state: present
+  when: dir.found
+  notify: Restart SSH daemon
+
+- name: Disabling password authentication for SSH
+  become: yes
+  lineinfile:
+    dest: /etc/ssh/sshd_config.d/10-ansible-ssh-configs.conf
+    line: "PasswordAuthentication no"
+    insertafter: "EOF"
+    state: present
+    create: true
   when: dir.found
   notify: Restart SSH daemon
 

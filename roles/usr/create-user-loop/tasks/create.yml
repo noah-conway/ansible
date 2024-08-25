@@ -1,5 +1,4 @@
 ---
-
 - name: "Check for zsh shell" 
   set_fact:
     has_zsh_user: "{{ has_zsh_user | default(false) or (item.shell == 'zsh') }}"
@@ -33,7 +32,7 @@
   become: yes
   ansible.builtin.user:
     name: "{{ item.username }}"
-      #id: " {{ item.uid | default(omit, True) }}"
+    uid: "{{ item.uid | default(omit) }}"
     password: "{{ item.password }}"
     shell: "/bin/{{ item.shell if item.shell is defined else default_shell }}"
     createhome: true
@@ -55,20 +54,3 @@
   loop: "{{ users }}"
   loop_control:
     label: "{{ item.username }}"
-    
-- name: Verifying git install
-  become: yes
-  ansible.builtin.package:
-    name: git
-    state: latest
-
-- name: "Configuring Git"
-  ansible.builtin.include_tasks: git.yml
-  when: "item.git_auth|d(false)|bool == true"
-  loop: "{{ users }}"
-
-- name: "adding dotfiles"
-  ansible.builtin.include_tasks: dotfiles.yml
-  loop: "{{ users }}"
-
-

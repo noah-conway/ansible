@@ -1,9 +1,4 @@
 ---
-- name: "Verifying automation user"
-  ansible.builtin.assert:
-    that: 
-      - "ansible_user_id == 'otto'"
-
 - name: 'Creating the automation group'
   become: yes
   ansible.builtin.group:
@@ -23,7 +18,7 @@
     dest: /etc/sudoers.d/11-automation
     validate: /usr/sbin/visudo -cf %s
 
-- name: "Adding Otto to the automation group and locking the password"
+- name: "Creating Otto, adding Otto to the automation group and locking the password"
   become: yes
   ansible.builtin.user:
     name: otto
@@ -31,3 +26,9 @@
     groups: automation
     state: present
     password: '!'
+
+- name: "Syncing workstation SSH keys to Otto"
+  include_role:
+    name: usr/sync-ssh-keys
+  vars:
+    target_user: otto

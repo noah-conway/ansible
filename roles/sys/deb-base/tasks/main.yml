@@ -1,6 +1,13 @@
 ---
 - ansible.builtin.assert: { that: "ansible_os_family == 'Debian'" }
 
+
+- name: '----------> Upgrading packages'
+  become: yes
+  ansible.builtin.apt:
+    upgrade: dist
+    update_cache: true
+
 - name: '----------> Configuring unattended security upgrades'
   ansible.builtin.include_tasks:
     file: unattended-upgrades.yml

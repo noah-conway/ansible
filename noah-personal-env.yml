@@ -1,0 +1,88 @@
+---
+# This needs to:
+# Create my user
+# DO git configuration
+# Copy over dotfiles for tmux, nvim, and zsh
+# Connect any shared drives if necessay
+- name: "Setting up personal environment for Noah"
+  become: yes
+  pre_tasks:
+    - name: "Creating Noah user"
+
+
+
+  tasks:
+###################################
+#   CONFIGURING GIT
+###################################
+    - name: "Configuring git | adding git user.name"
+      become: yes
+      ansible.builtin.file:
+        path: "/home/{{ user.username }}/.config/git"
+        owner: "{{ user.username }}"
+        group: "{{ user.username }}"
+        mode: "0755"
+        state: directory
+
+    - name: "Configuring git | adding git user.name"
+      become: yes
+      ansible.builtin.file:
+        path: "/home/{{ user.username }}/.config/git/config"
+        owner: "{{ user.username }}"
+        group: "{{ user.username }}"
+        mode: "0644"
+        state: touch
+
+    - name: "Configuring git | adding git user.name"
+      become: yes
+      ansible.builtin.lineinfile:
+        path: "/home/{{ user.username }}/.config/git/config"
+        line: "[user]"
+        state: present
+        insertafter: "EOF"
+
+    - name: "Configuring git | adding git user.email"
+      become: yes
+      ansible.builtin.lineinfile:
+        path: "/home/{{ user.username }}/.config/git/config"
+        insertafter: '^\[user\]$'
+        line: " email = {{ git_email }}"
+
+    - name: "Configuring git | adding git user.name"
+      become: yes
+      ansible.builtin.lineinfile:
+        path: "/home/{{ user.username }}/.config/git/config"
+        insertafter: '^\[user\]$'
+        line: " name = {{ git_username }}"
+        #  when: "user.git_auth|d(false)|bool == true"
+    - name: "Retrieving {{ user.username }}'s public key"
+      become: yes
+      ansible.builtin.slurp:
+        src: '/home/{{ user.username }}/.ssh/{{ git_pubkey }}.pub'
+      register: local_pubkey
+
+      #- name: "Adding {{ user.username }}'s key to {{ git_username }}'s github account"
+      #community.general.github_key:
+      #  name: "Access key for {{ user.username }}@{{ ansible_hostname }}"
+      #  token: "{{ github_PAT }}"
+      #  pubkey: "{{ local_pubkey['content'] | b64decode }}"
+
+###################################
+#   Setting up dotfiles
+###################################
+
+
+    - name: "Cloning TMUX dotfiles"
+      ansible.builtin.git:
+        repo: 
+
+
+      
+      
+    - name: "Cloning NVIM dotfiles"
+
+    - name: "Cloning ZSH dotfiles"
+
+ 
+    
+

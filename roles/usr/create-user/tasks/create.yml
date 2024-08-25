@@ -59,16 +59,4 @@
     groups: sudo
     append: true
   when: "user.sudo == true"
-    
-- name: Verifying git install
-  become: yes
-  ansible.builtin.package:
-    name: git
-    state: latest
-
-- name: "Configuring Git"
-  ansible.builtin.include_tasks: git.yml
-  when: "user.git_auth == true"
-
-
 
