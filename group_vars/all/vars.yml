@@ -5,10 +5,11 @@ proxmox_pass: "xm^JqfeX2fNtNo"
 proxmox_host: "10.10.26.10"
 proxmox_node: "pve"
 proxmox_vm_storage: "tank"
-proxmox_template_storage: "local:vztmpl"
 proxmox_netif: "eth0"
 proxmox_netbridge: "vmbr0"
 proxmox_lxc_default_pass: "AE&GWwA$mAk5hZ7d$$s4YKoK^3^ite"
+workstation_ssh_keys:
+  - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOd9k2JrObmt3GeJXogI06CyY271bmk9lkkmmv6LN79k nconway@posteo.net
 ### Secret variables:
 #       localuser_default_password
 #       github_PAT

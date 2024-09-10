@@ -1,0 +1,9 @@
+---
+- name: "Installing nextcloud"
+  hosts: nextcloud
+
+  vars_files:
+    - group_vars/all/nextcloud_vars.yml 
+
+  roles:
+    - role: nextcloud.admin.install_nextcloud

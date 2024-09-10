@@ -1,0 +1,36 @@
+---
+nextcloud_version_channel: "releases"
+nextcloud_get_latest: true
+nextcloud_repository: "https://download.nextcloud.com/server"
+nextcloud_trusted_domain:
+  - "{{ ansible_default_ipv4.address }}"
+nextcloud_install_websrv: true
+nextcloud_websrv: nginx
+nextcloud_disable_websrv_default_site: false
+nextcloud_webroot: "/opt/nextcloud"
+nextcloud_data_dir: "/var/ncdata"
+nextcloud_admin_name: "ncadmin"
+nextcloud_admin_pwd: "Nr8BXQ%cKeJ"
+nextcloud_install_db: true
+nextcloud_db_host: "127.0.0.1"
+nextcloud_db_backend: "mariadb"
+nextcloud_db_name: "nextcloud"
+nextcloud_db_admin: "ncadmin"
+nextcloud_db_pwd: "c45JRP##F9n"
+upgrade_packages_first: true
+php_install_external_repos: true
+php_ver: '8.1'
+php_dir: "/etc/php/{{ php_ver }}"
+php_bin: "php-fpm{{ php_ver }}"
+php_pkg_spe:
+  - "php{{ php_ver }}-imap"
+  - "php{{ php_ver }}-imagick"
+  - "php{{ php_ver }}-xml"
+  - "php{{ php_ver }}-zip"
+  - "php{{ php_ver }}-mbstring"
+php_socket: "/run/php/{{ php_ver }}-fpm.sock"
+php_memory_limit: 512M
+nextcloud_websrv_user: "www-data"
+nextcloud_websrv_group: "www-data"
+nextcloud_mysql_root_pwd: "c45JRP##F9n"
+

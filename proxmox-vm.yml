@@ -1,6 +1,6 @@
 ---
-- name: "Provisioning the LXC containers on Proxmox as defined in the Ansible inventory file" 
-  hosts: lxc
+- name: "Provisioning the vms containers on Proxmox as defined in the Ansible inventory file" 
+  hosts: vms
   gather_facts: false
 
   tasks:
@@ -8,7 +8,7 @@
       become: no
       delegate_to: 127.0.0.1
       ansible.builtin.slurp:
-        src: "~/.ssh/noah-newman.pub"
+        src: "~/.ssh/noah-elaine.pub"
       register: ssh_pub_key
 
     - name: "Provisioning LXC containers on Proxmox node {{ proxmox_host }}"
@@ -40,3 +40,4 @@
         api_password: "{{ proxmox_pass }}"
         api_host: "{{ proxmox_host }}"
         state: started
+
