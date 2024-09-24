@@ -1,0 +1,10 @@
+---
+- hosts: unifiserver
+  vars_files:
+    - group_vars/servers/users.yml
+
+  become: yes
+
+
+  roles:
+    - role: apps/unifi-server
