@@ -1,8 +1,4 @@
 ---
-- name: "Facts/debug"
-  ansible.builtin.debug:
-    var: ansible_facts
-
 - name: "Installing MongoDB | Adding source list"
   block:
     - name: "Removing existing GPG key | ensuring correct key is used"
@@ -21,7 +17,7 @@
     - name: "Adding MongoDB repository"
       ansible.builtin.apt_repository:
         repo: 'deb [ signed-by=/usr/share/keyrings/mongodb-server-{{ MongoDB_version }}.asc ] http://repo.mongodb.org/apt/debian bookworm/mongodb-org/{{ MongoDB_version }} main'
-        filename: "mongodb-org-{{ MongoDB_version }}.list"
+        filename: "mongodb-org-{{ MongoDB_version }}"
         update_cache: yes
         state: present
       become: yes

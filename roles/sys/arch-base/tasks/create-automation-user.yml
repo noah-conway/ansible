@@ -27,10 +27,3 @@
     state: present
     password: '!'
 
-- name: "Setting workstation authorized keys for Otto"
-  become: yes
-  ansible.posix.authorized_key:
-    user: otto
-    state: present
-    key: "{{ item }}"
-  loop: "{{ workstation_ssh_keys }}"

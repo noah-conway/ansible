@@ -16,7 +16,7 @@
     validate: 'visudo -cf %s'
 
 - name: Installing "{{ helper }}" aur helper
-  aur:
+  kewlfft.aur.aur:
     name: "{{ helper }}"
     use: makepkg
     state: present

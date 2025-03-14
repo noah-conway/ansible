@@ -6,6 +6,8 @@ packages_essential:
   - vim
   - git
   - curl
+  - rsync
+  - tree
   - wget
   - htop
   - iperf3

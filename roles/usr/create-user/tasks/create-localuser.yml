@@ -18,6 +18,7 @@
     generate_ssh_key: "{{ localuser.sshkey }}"
     ssh_key_type: "ed25519" 
     ssh_key_comment: "Key for {{ localuser.name }}@{{ ansible_hostname }}"
+
     
 - name: 'Creating "sudoers" group'
   become: yes

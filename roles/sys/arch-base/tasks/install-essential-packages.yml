@@ -1,4 +1,5 @@
-# Tasks to install essential packages and configure AUR helper w/ makepkg
+# Tasks to install  & configure "essential" packages
+# I.e. packages I'd want on any arch linux installation
 
 - name: Installing essential packages
   become: yes
@@ -6,13 +7,26 @@
     name: "{{ packages_essential }}"
     state: latest
 
-# I confugre makepkg here because I need to install it in base-devel, which I do in "install essential pkgs"
+# Configuring makepkg
 - name: Setting MAKEFLAGS in /etc/makepkg.conf
   become: yes
   ansible.builtin.lineinfile:
     dest: /etc/makepkg.conf
     regexp: '^#MAKEFLAGS="-j2"'
     line: 'MAKEFLAGS="-j{{ansible_processor_vcpus}}"'
+
+# Linking Dash to /bin/sh - Dash installed in "essential packages" module
+- name: "Relinking /bin/sh to Dash"
+  ansible.builtin.file:
+    src: /bin/dash
+    dest: /usr/bin/sh
+    state: link
+    force: yes
+
+- name: "Adding Dash re-link pacman hook"
+  ansible.builtin.copy:
+    src: files/dash.hook
+    dest: /etc/pacman.d/hooks/dash.hook
 
 # This allows the automation user to run pacman without password
 # For use with ansible AUR module - see that project for more info
@@ -27,7 +41,7 @@
 
 
 - name: Installing "{{ helper }}" aur helper
-  aur:
+  kewlfft.aur.aur:
     name: "{{ helper }}"
     use: makepkg
     state: present

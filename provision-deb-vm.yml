@@ -1,15 +1,16 @@
 ---
 - name: "Creating the 'otto' automation user"
-  hosts: lxc
-  ansible_user: root
+  hosts: vms
+  remote_user: root
   vars_files:
     - group_vars/all/workstation-ssh-keys.secret
+    - group_vars/servers/users.yml
 
   roles:
     - role: usr/create-ansible-user
-    - role: usr/sync-ssh-keys
-      vars:
-        target_user: otto
+    - role: sys/deb-base
+    - role: sys/qemu-agent
+    - role: usr/create-user-loop
 
 
 

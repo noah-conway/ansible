@@ -1,6 +1,7 @@
 ---
-- hosts: AVM
-  remote_user: root
+- hosts: archboxes
 
   roles:
-    - role: ws/create-ansible-user
+    - usr/create-ansible-user
+    - sys/arch-base
+    - usr/create-user-loop

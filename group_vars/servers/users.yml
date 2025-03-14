@@ -2,7 +2,8 @@
 users:
   - username: "noah"
     password: "3-uP&7"
-    shell: zsh
+    uid: 1011
+    shell: bash
     create_ssh_key: true
     copy_ssh_key: true
     sudo: true

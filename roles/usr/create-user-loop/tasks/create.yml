@@ -54,3 +54,15 @@
   loop: "{{ users }}"
   loop_control:
     label: "{{ item.username }}"
+
+
+- name: "Add ssh keys to users"
+  include_role:
+    name: usr/sync-ssh-keys
+  vars: 
+    target_user: "noah"
+  when: "{{ item.copy_ssh_key|d(false)|bool == true }}"
+  loop: "{{ users }}"
+  loop_control:
+    label: "{{ item.username }}"
+

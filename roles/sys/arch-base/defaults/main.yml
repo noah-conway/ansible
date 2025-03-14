@@ -5,11 +5,14 @@ packages_essential:
   - base-devel
   - linux-headers
   - pacman-contrib
-  - networkmanager
   - dhcpcd
+  - iw
+  - iwd
   - nmap
   - inetutils
   - net-tools
+  - iperf3
+  - speedtest-cli
   - vim
   - nano
   - git
@@ -23,10 +26,12 @@ packages_essential:
   - tar
   - lm_sensors
   - bash-completion
+  - dash
   - man-pages
   - man-db
   - tree
   - htop
   - gdu
+  - fzf
+  - tmux
   - python
-  - ansible

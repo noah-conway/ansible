@@ -9,6 +9,7 @@
   roles:
     - role: usr/create-ansible-user
     - role: sys/deb-base
+    - role: sys/qemu-agent
     - role: usr/create-user-loop
 
 
