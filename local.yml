@@ -1,0 +1,10 @@
+- hosts: localhost
+  connection: local
+  become: true
+
+  tasks:
+  - name: "Touch a test file"
+    ansible.builtin.file:
+      path: /tmp/pull_works.txt
+      state: touch
+      mode: u=rw,g=r,o-rwx
