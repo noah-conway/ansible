@@ -1,0 +1,18 @@
+- hosts: elaine
+  remote_user: noah
+
+  pre_tasks:
+    - 
+
+
+    - name: Rebooting the machine
+      ansible.builtin.reboot:
+
+  roles:
+    - role: ws/pacman-mirrors
+    - role: ws/pacman-multilib
+    - role: ws/load-microcode
+    - role: security/ssh
+    - role: ws/install-essential-packages
+    - role: ws/install-aur-helper
+    - role: ws/install-nonessential-packages
