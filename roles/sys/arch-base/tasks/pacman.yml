@@ -71,6 +71,13 @@
   when: 'pacman_parallel_dls > 0'
   notify: Update_pacman
 
+- name: "Creating /etc/pacman.d/hooks directory"
+  become: yes
+  ansible.builtin.file:
+    path: /etc/pacman.d/hooks
+    state: directory
+    mode: '0755'
+
 - meta: flush_handlers
 
 

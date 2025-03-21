@@ -1,7 +1,6 @@
 ---
 - hosts: archboxes
+  become: yes
 
   roles:
-    - usr/create-ansible-user
     - sys/arch-base
-    - usr/create-user-loop

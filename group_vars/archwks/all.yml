@@ -1,0 +1,36 @@
+---
+users:
+  - username: noah
+    uid: 1349
+    shell: zsh
+    create_ssh_key: true
+    copy_ssh_key: true
+    sudo: true
+    user_state: present
+
+workstation_pkgs:
+  - firefox
+  - alacritty
+  - neovim
+  - bitwarden
+  - bitwarden-cli
+  - imagemagick
+  - exiv2
+  - bluez
+  - bluez-utils
+  - cups
+  - cups-pdf
+  - python-numpy
+  - python-pandas
+  - python-passlib
+  - noto-fonts
+  - noto-fonts-cjk
+  - noto-fonts-emoji
+  - ttf-liberation
+  - xorg-fonts-misc
+  - syncthing
+  - musescore
+  - zathura
+  - ansible
+   
+

@@ -11,6 +11,7 @@ packages_essential:
   - nmap
   - inetutils
   - net-tools
+  - whois
   - iperf3
   - speedtest-cli
   - vim

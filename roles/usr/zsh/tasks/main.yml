@@ -1,0 +1,15 @@
+---
+  - name: "Setting /etc/zsh/zshenv"
+    become: yes
+    ansible.builtin.file:
+      src: files/zshenv
+      dest: /etc/zsh/zshenv
+      
+  - name: "Pulling ZSH configuration from {{ GIT_SSH_URL }}"
+    become: yes
+    become_user: "{{ zsh_user }}"
+    ansible.builtin.git:
+      repo: "{{ repo }}"
+      dest: "{{ zsh_target_dir }}"
+      update: true
+
