@@ -1,0 +1,32 @@
+---
+  - name: "Checking that target_user is defined"
+    ansible.builtin.assert:
+      that:
+        - target_user is defined
+        - target_user is not none
+
+  - name: "Create XDG base directories"
+    become: yes
+    ansible.builtin.file:
+      path: "/home/{{ target_user }}/{{ item }}"
+      owner: "{{ target_user }}"
+      group: "{{ target_user }}"
+      mode: "0755"
+      state: directory
+    loop:
+      - ".config"
+      - ".cache"
+      - ".local"
+
+  - name: "Create XDG base directories in .local"
+    become: yes
+    ansible.builtin.file:
+      path: "/home/{{ target_user }}/.local/{{ item }}"
+      owner: "{{ target_user }}"
+      group: "{{ target_user }}"
+      mode: "0755"
+      state: directory
+    loop:
+      - ".state"
+      - ".share"
+

@@ -1,0 +1,4 @@
+---
+target_user: null
+zsh_repo: zsh
+zsh_target_dir: "/home/{{ target_user }}/config/zsh"

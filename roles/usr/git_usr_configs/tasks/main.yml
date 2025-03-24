@@ -1,0 +1,55 @@
+---
+    - name: "Checking that target_user is defined"
+      ansible.builtin.assert:
+        that:
+         - target_user is defined
+         - target_user is not none
+
+    - name: "Configuring git | creating git config directory"
+      become: yes
+      ansible.builtin.file:
+        path: "{{ git_config_dir }}"
+        owner: "{{ target_user }}"
+        group: "{{ target_user }}"
+        mode: "0755"
+        state: directory
+
+    - name: "Configuring git | adding user header"
+      become: yes
+      become_user: "{{ target_user }}"
+      ansible.builtin.lineinfile:
+        path: "{{ git_config_dir }}/config"
+        line: "[user]"
+        state: present
+        regexp: '^\[user\]$'
+        insertafter: "EOF"
+        create: true
+        mode: "0644"
+
+    - name: "Configuring git | adding user.name and user.email"
+      become: yes
+      become_user: "{{ target_user }}"
+      ansible.builtin.lineinfile:
+        path: "{{ git_config_dir }}/config"
+        regexp: "{{ item.regexp }}"
+        line: "{{ item.line }}"
+        state: present
+        insertafter: '^\[user\]$'
+      loop:
+        - line: " email = {{ GIT_EMAIL }}"
+          regexp: '^\s*email\s*=\s*.*$'
+        - line: " name = {{ GIT_USER }}"
+          regexp: '^\s*name\s*=\s*.*$'
+
+    - name: "Retrieving {{ target_user }}'s public key"
+      become: yes
+      ansible.builtin.slurp:
+        src: '/home/{{ target_user }}/.ssh/id_ed25519.pub'
+      register: pubkey
+
+    - name: "Adding {{ target_user }}'s key to {{ GIT_USER }}'s github account"
+      community.general.github_key:
+        name: "Access key for {{ target_user }}@{{ ansible_hostname }}"
+        token: "{{ GITHUB_PAT }}"
+        pubkey: "{{ pubkey['content'] | b64decode }}"
+

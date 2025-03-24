@@ -1,0 +1,27 @@
+---
+  - name: "Checking that target_user is defined"
+    ansible.builtin.assert:
+      that:
+        - target_user is defined
+        - target_user is not none
+
+  - name: "Checking that zsh_repo is defined"
+    ansible.builtin.assert:
+      that:
+        - zsh_repo is defined
+        - zsh_repo is not none
+
+  - name: "Copying custom /etc/zsh/zshenv\nThis file also defines XDG Directoy Specifications"
+    become: yes
+    ansible.builtin.copy:
+      src: files/zshenv
+      dest: /etc/zsh/zshenv
+      
+  - name: "Pulling ZSH configuration from {{ GIT_SSH_URL }}"
+    become: yes
+    become_user: "{{ target_user }}"
+    ansible.builtin.git:
+      repo: "{{ GIT_SSH_URL }}/{{ zsh_repo }}.git"
+      dest: "{{ zsh_target_dir }}"
+      update: true
+

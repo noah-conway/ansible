@@ -15,12 +15,12 @@
   hosts: archwks
   vars_prompt:
     - name: pass_change
-      prompt: "Would you like to change the password for target user? (0/1)"
+      prompt: "Would you like to set a new password for target user? (0/1)"
       private: false
       default: 0
 
     - name: password
-      prompt: "Enter password for target user (skip if not changing)"
+      prompt: "Enter password for target user (Enter to skip)"
       private: true
       encrypt: sha512_crypt
       confirm: true
@@ -49,6 +49,10 @@
     nvim_repo: "neovim"
     tmux_repo: "tmux"
     zsh_repo: "zsh"
+
+  roles:
+    - usr/XDG_base_directories
+    - usr/git_usr_configs
 
   pre_tasks:
       # Create users defined in group vars
@@ -86,18 +90,12 @@
 
           
   tasks:
-    # Ensuring Arch is up to date, and installing packages
-    - name: "Pacman -Syu"
-      become: yes
-      community.general.pacman:
-        upgrade: true
-        update_cache: true
-
     - name: "Installing workstation packages"
       become: yes
       community.general.pacman:
         name: "{{ workstation_pkgs }}"
-        state: latest
+        state: present
+        update_cache: true
 
     # Enabling necessary services
     - name: "Enabling bluetooth.service"
@@ -107,123 +105,11 @@
         enabled: true
         state: started
 
-    - name: "Create XDG base directories"
-      become: yes
-      ansible.builtin.file:
-        path: "/home/{{ target_user }}/{{ item }}"
-        owner: "{{ target_user }}"
-        group: "{{ target_user }}"
-        mode: "0755"
-        state: directory
-      loop:
-        - ".config"
-        - ".cache"
-        - ".local"
-
-    - name: "Create XDG base directories in .local"
-      become: yes
-      ansible.builtin.file:
-        path: "/home/{{ target_user }}/.local/{{ item }}"
-        owner: "{{ target_user }}"
-        group: "{{ target_user }}"
-        mode: "0755"
-        state: directory
-      loop:
-        - ".state"
-        - ".share"
-
-    # Configuring git
-    - name: "Configuring git | creating git config directory"
-      become: yes
-      ansible.builtin.file:
-        path: "{{ git_config_dir }}"
-        owner: "{{ target_user }}"
-        group: "{{ target_user }}"
-        mode: "0755"
-        state: directory
-
-    - name: "Configuring git | creating git config file"
-      become: yes
-      become_user: "{{ target_user }}"
-      ansible.builtin.file:
-        path: "{{ git_config_dir }}/config"
-        owner: "{{ target_user }}"
-        group: "{{ target_user }}"
-        mode: "0644"
-        state: touch
-
-    - name: "Configuring git | checking for existing configuration"
-      become: yes
-      become_user: "{{ target_user }}"
-      ansible.builtin.lineinfile:
-        state: absent
-        path: "{{ git_config_dir }}/config"
-        regexp: '^\[user\]$'
-      check_mode: true
-      register: git_config_lif_check
-
-    - name: "Configuring git | adding user header"
-      become: yes
-      become_user: "{{ target_user }}"
-      ansible.builtin.lineinfile:
-        path: "{{ git_config_dir }}/config"
-        line: "[user]"
-        state: present
-        insertafter: "EOF"
-      when: git_config_lif_check.found == 0
-
-    - name: "Configuring git | clearing existing git configuration"
-      become: yes
-      become_user: "{{ target_user }}"
-      ansible.builtin.lineinfile:
-        path: "{{ git_config_dir }}/config"
-        regex: "{{ item }}"
-        state: absent
-      loop:
-        - '^\s*name\s*=\s*.*$'
-        - '^\s*email\s*=\s*.*$'
-
-    - name: "Configuring git | adding user.name and user.email"
-      become: yes
-      become_user: "{{ target_user }}"
-      ansible.builtin.lineinfile:
-        path: "{{ git_config_dir }}/config"
-        line: "{{ item }}"
-        state: present
-        insertafter: '^\[user\]$'
-      loop:
-        - " email = {{ GIT_EMAIL }}"
-        - " name = {{ GIT_USER }}"
-
-    - name: "Retrieving {{ target_user }}'s public key"
-      become: yes
-      ansible.builtin.slurp:
-        src: '/home/{{ target_user }}/.ssh/id_ed25519.pub'
-      register: pubkey
-
-    - name: "Adding {{ target_user }}'s key to {{ GIT_USER }}'s github account"
-      community.general.github_key:
-        name: "Access key for {{ target_user }}@{{ ansible_hostname }}"
-        token: "{{ GITHUB_PAT }}"
-        pubkey: "{{ pubkey['content'] | b64decode }}"
-
-    - name: "Setting up ZSH configuration"
-      become: yes
+    - name: "Pulling ZSH configuration from {{ GIT_SSH_URL}}"
       ansible.builtin.include_role:
-        name: usr/zsh
-      vars:
-        zsh_user: "{{ target_user }}"
-        repo: "{{ GIT_SSH_URL }}/{{ zsh_repo }}.git"
+        name: usr/zsh_usr_configs
+      vars: 
         zsh_target_dir: "{{ xdg_config_home }}/zsh"
-
-    
-    - name: "Pulling ZSH configuration from {{ GIT_SSH_URL }}"
-      become: yes
-      become_user: "{{ target_user }}"
-      ansible.builtin.git:
-        repo: "{{ GIT_SSH_URL }}/{{ zsh_repo }}.git"
-        dest: "{{ xdg_config_home }}/zsh"
-        update: true
       when: "target_user_check.shell == '/bin/zsh'"
 
     - name: "Pulling Tmux configuration from {{ GIT_SSH_URL }}"
