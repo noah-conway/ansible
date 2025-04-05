@@ -1,0 +1,11 @@
+---
+users:
+  - username: noah
+    uid: 1349
+    shell: bash
+    password: "{{ noah_user_pass }}"
+    copy_ssh_key: true
+    sudo: true
+    nfs: true
+    user_state: present
+

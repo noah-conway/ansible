@@ -7,6 +7,7 @@ packages_essential:
   - git
   - curl
   - rsync
+  - fzf
   - tree
   - wget
   - htop

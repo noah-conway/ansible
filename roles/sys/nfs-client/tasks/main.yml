@@ -1,0 +1,5 @@
+---
+- name: '----------> Creating NFS groups and users'
+  ansible.builtin.include_tasks:
+    file: create_group.yml
+

@@ -128,6 +128,24 @@
         dest: "{{ xdg_config_home }}/neovim"
         update: true
 
+    - name: "Creating personal directories in ~/"
+      become: yes
+      become_user: "{{ target_user }}"
+      ansible.builtin.file:
+        path: "/home/{{ target_user }}/{{ item }}"
+        owner: "{{ target_user }}"
+        group: "{{ target_user }}"
+        mode: "0755"
+        state: directory
+      loop:
+        - "{{ DOWNLOADS_DIR }}"
+        - "{{ DEV_DIR }}"
+        - "{{ DOCUMENTS_DIR }}"
+        - "{{ DOCUMENTS_DIR }}/local"
+        - "{{ MEDIA_DIR }}"
+        - "{{ MUSIC_DIR }}"
+        - "{{ MUSIC_DIR }}/new"
+
     
 
     

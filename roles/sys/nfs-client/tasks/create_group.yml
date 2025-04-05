@@ -1,0 +1,17 @@
+---
+- name: "Creating NFS Sharing group"
+  become: yes
+  ansible.builtin.group:
+    name: "{{ nfs_groupname }}"
+    state: present
+    gid: "{{ nfs_gid }}"
+
+- name: "Adding users into NFS sharing group: {{ nfs_groupname }}"
+  become: yes
+  ansible.builtin.user:
+    name: "{{ item.username }}"
+    groups: "{{ nfs_groupname }}"
+    append: yes
+  when: "item.nfs|d(false)|bool == true"
+  loop: "{{ users }}"
+

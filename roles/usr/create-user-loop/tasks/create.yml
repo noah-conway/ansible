@@ -11,7 +11,7 @@
     name: 
       - zsh
     state: present
-  when: 'has_zsh_user == true'
+  when: 'item.shell is defined and has_zsh_user == true'
 
 - name: 'Creating "sudoers" group'
   become: yes
@@ -59,10 +59,11 @@
 - name: "Add ssh keys to users"
   include_role:
     name: usr/sync-ssh-keys
-  vars: 
-    target_user: "noah"
-  when: "{{ item.copy_ssh_key|d(false)|bool == true }}"
+  when: "{{ sshusr.copy_ssh_key|d(false)|bool == true }}"
   loop: "{{ users }}"
   loop_control:
-    label: "{{ item.username }}"
+    label: "{{ sshusr.username }}"
+    loop_var: sshusr #need to define loop_var, as item is used in sync-ssh-keys role
+  vars:
+    target_user: "{{ sshusr.username }}"
 

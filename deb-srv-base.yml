@@ -1,0 +1,6 @@
+---
+- name: "Base server configuration for debvms group"
+  hosts: debvms
+
+  roles:
+    - role: usr/create-ansible-user

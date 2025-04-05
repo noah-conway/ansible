@@ -1,0 +1,2 @@
+---
+nfs_exports_root: "/mnt/data"

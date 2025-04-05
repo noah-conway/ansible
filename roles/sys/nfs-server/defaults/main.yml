@@ -1,0 +1,6 @@
+---
+nfs_exports_root: ""
+nfs_directories: NULL
+nfs_groupname: "nfs"
+nfs_gid: "1350"
+nfs_options: "rw,no_subtree_check"

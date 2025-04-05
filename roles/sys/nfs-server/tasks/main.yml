@@ -1,0 +1,68 @@
+---
+- name: "Creating NFS Sharing group"
+  become: yes
+  ansible.builtin.group:
+    name: "{{ nfs_groupname }}"
+    state: present
+    gid: "{{ nfs_gid }}"
+
+- name: "Checking that all 'NFS Users' exists"
+  become: yes
+  ansible.builtin.getent:
+    database: passwd
+    key: "{{ item }}"
+  loop: "{{ nfs_users }}"
+  register: nfs_user_checks
+
+- name: "debug"
+  ansible.builtin.debug:
+    var: nfs_user_checks
+
+- name: "Adding users into NFS sharing group: {{ nfs_groupname }}"
+  become: yes
+  ansible.builtin.user:
+    name: "{{ item }}"
+    groups: "{{ nfs_groupname }}"
+    append: yes
+  loop: "{{ nfs_users }}"
+
+- name: "Creating exports root folder"
+  become: yes
+  ansible.builtin.file:
+    path: "{{ nfs_exports_root }}/exports"
+    state: directory
+    mode: '0755'
+
+- name: "Creating shared directories"
+  become: yes
+  ansible.builtin.file:
+    path: "{{ nfs_exports_root }}/exports/{{ item }}"
+    state: directory
+    mode: '2770'
+    group: "{{ nfs_groupname }}"
+  loop: "{{ nfs_directories }}"
+  when: nfs_directories is defined and nfs_directories | length > 0
+  
+- name: "Installing nfs-kernel-server on Debian-based systems"
+  become: yes
+  ansible.builtin.apt:
+    name: nfs-kernel-server
+    state: present
+  when: ansible_distribution == "Debian"
+
+- name: "Enabling nfs-server"
+  become: yes
+  ansible.builtin.systemd:
+    name: nfs-server
+    enabled: true
+
+- name: "Adding NFS shares to /etc/exports file"
+  become: yes
+  ansible.builtin.lineinfile:
+    path: /etc/exports
+    line: "{{ nfs_exports_root }}/exports/{{ item }} {{ nfs_share_network }}({{ nfs_options }})" 
+    insertafter: EOF
+    create: yes
+  loop: "{{ nfs_directories }}"
+  notify: Restart nfs-server
+

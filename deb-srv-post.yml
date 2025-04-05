@@ -1,0 +1,15 @@
+---
+- name: "Post configuration for debvms group"
+  hosts: debvms
+
+  pre_tasks:
+    - name: "print user"
+      debug:
+        var: ansible_env.USER
+
+  roles:
+    - usr/create-user-loop
+    - sys/nfs-server
+    - sys/deb-base
+    - sys/qemu-agent
+    - sec/ssh

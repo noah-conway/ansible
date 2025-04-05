@@ -1,0 +1,6 @@
+---
+- name: "Configuring debian server"
+  hosts: debvms
+
+- import_playbook: deb-srv-base.yml
+- import_playbook: deb-srv-post.yml

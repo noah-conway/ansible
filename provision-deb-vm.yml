@@ -1,15 +1,14 @@
 ---
-- name: "Creating the 'otto' automation user"
-  hosts: vms
-  remote_user: root
-  vars_files:
-    - group_vars/all/workstation-ssh-keys.secret
-    - group_vars/servers/users.yml
+- name: "Provisioning debvms"
+  hosts: debvms
+
+  pre_tasks:
+    - name: "print user"
+      debug:
+        var: ansible_env.USER
 
   roles:
     - role: usr/create-ansible-user
-    - role: sys/deb-base
-    - role: sys/qemu-agent
     - role: usr/create-user-loop
 
 

@@ -1,11 +1,12 @@
 ---
 users:
   - username: noah
-    uid: 1349
+    uid: "{{ NOAH_USER_UUID }}"
     shell: zsh
     create_ssh_key: true
     copy_ssh_key: true
     sudo: true
+    nfs: true
     user_state: present
 
 workstation_pkgs:
@@ -14,6 +15,7 @@ workstation_pkgs:
   - neovim
   - bitwarden
   - bitwarden-cli
+  - yt-dlp
   - imagemagick
   - exiv2
   - bluez
