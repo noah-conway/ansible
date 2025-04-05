@@ -4,6 +4,7 @@ NOAH_USER_UUID: "1349"
 
 ## NFS variables
 nfs_share_network: "192.168.4.0/255.255.252.0"
+nfs_server_addr: "192.168.5.251"
 nfs_groupname: "nfs" 
 nfs_gid: "1350"
 nfs_users:

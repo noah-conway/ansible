@@ -1,5 +1,24 @@
 ---
+- name: 'Installing NFS on client systems: Arch'
+  become: yes
+  community.general.pacman:
+    name: nfs-utils
+    state: present
+  when: 'ansible_os_family == "Archlinux"'
+
+- name: 'Creating NFS mount directory'
+  ansible.builtin.file:
+    path: "{{ nfs_mount_dir }}"
+    state: directory
+    mode: '0755'
+
 - name: '----------> Creating NFS groups and users'
   ansible.builtin.include_tasks:
     file: create_group.yml
+  when: 'create_group == true'
+
+- name: '----------> Configuring autofs'
+  ansible.builtin.include_tasks:
+    file: autofs.yml
+  when: 'use_autofs == true'
 

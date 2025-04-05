@@ -10,6 +10,3 @@
   roles:
     - usr/create-user-loop
     - sys/nfs-server
-    - sys/deb-base
-    - sys/qemu-agent
-    - sec/ssh

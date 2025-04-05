@@ -1,3 +1,41 @@
 ---
+- name: "Installing autofs from AUR on Arch systems"
+  become: yes
+  become_user: otto
+  kewlfft.aur.aur:
+    name: autofs
+    use: paru
+    state: present
+  when: ansible_os_family == 'Archlinux' 
+
+- name: "Editing main autofs config file /etc/autofs/auto.master"
+  become: yes
+  ansible.builtin.lineinfile:
+    path: "/etc/autofs/auto.master"
+    line: "{{ nfs_mount_dir }} /etc/autofs/{{ autofs_nfs_file }} {{ autofs_options }}"
+    regexp: "^{{ nfs_mount_dir }}.*"
+    insertafter: EOF
+
+- name: "Adding shares into config file /etc/autofs/{{ autofs_nfs_file }}"
+  become: yes
+  ansible.builtin.lineinfile:
+    path: "/etc/autofs/{{ autofs_nfs_file }}"
+    line: "{{ item }} -fstype={{ nfs_version }},{{ mount_dir_option }} {{ nfs_server_addr }}:/mnt/data/exports/{{ item }}"
+    insertafter: EOF
+    create: true
+  loop: "{{ nfs_directories }}"
+  notify: "Restart autofs"
+
+- name: "Enabling autofs service"
+  become: yes
+  ansible.builtin.systemd:
+    name: autofs
+    state: started
+    enabled: true
+
+- meta: flush_handlers
+
+
+
 
 

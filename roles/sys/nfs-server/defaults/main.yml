@@ -4,3 +4,6 @@ nfs_directories: NULL
 nfs_groupname: "nfs"
 nfs_gid: "1350"
 nfs_options: "rw,no_subtree_check"
+nfs_port: 2049
+portmapper_port: 111
+mountd_port: 33333

@@ -1,0 +1,7 @@
+---
+- name: "testing UFW role"
+  remote_user: otto
+  hosts: ufw-test
+
+  roles:
+    - sec/ufw

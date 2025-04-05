@@ -1,0 +1,13 @@
+---
+create_group: true
+nfs_groupname: "nfs"
+nfs_gid: "1350"
+nfs_mount_dir: "/mnt/nfs"
+nfs_directories: NULL
+nfs_version: "nfs4"
+use_autofs: true
+autofs_nfs_file: "auto.nfs"
+autofs_options: "--ghost --timeout=60"
+mount_dir_option: "rw"
+
+

@@ -1,0 +1,49 @@
+---
+- name: "Allowing incoming traffic from NFS port"
+  become: yes
+  community.general.ufw:
+    rule: allow
+    proto: "{{ item }}"
+    src: "{{ nfs_share_network }}"
+    port: "{{ nfs_port }}"
+  loop:
+    - tcp
+    - udp
+
+- name: "Allowing incoming traffic from portmapper port"
+  become: yes
+  community.general.ufw:
+    rule: allow
+    proto: "{{ item }}"
+    src: "{{ nfs_share_network }}"
+    port: "{{ portmapper_port}}"
+  loop:
+    - tcp
+    - udp
+
+- name: "Setting static port for mountd"
+  become: yes
+  ansible.builtin.lineinfile:
+    path: "/etc/default/nfs-kernel-server"
+    line: "{{ item.line }}"
+    regexp: "{{ item.regexp }}"
+    insertafter: "{{ item.insertafter }}"
+  loop:
+    - line: '#RPCMOUNTDOPTS="--manage-gids"'
+      regexp: '^RPCMOUNTDOPTS="--manage-gids"$'
+      insertafter: '^# Options for rpc.mountd.$'
+    - line: 'RPCMOUNTDOPTS="--port {{ mountd_port }}"'
+      regexp: '^RPCMOUNTDOPTS="--port [0-9]+\"$'
+      insertafter: '^#RPCMOUNTDOPTS="--manage-gids"$'
+  notify: "Restart nfs-server"
+
+- name: "Allowing incoming traffic from mountd port"
+  become: yes
+  community.general.ufw:
+    rule: allow
+    proto: "{{ item }}"
+    src: "{{ nfs_share_network }}"
+    port: "{{ mountd_port }}"
+  loop:
+    - tcp
+    - udp

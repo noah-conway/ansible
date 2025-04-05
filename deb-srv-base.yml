@@ -4,3 +4,7 @@
 
   roles:
     - role: usr/create-ansible-user
+    - role: sys/deb-base
+    - role: sec/ufw
+    - role: sec/ssh
+    - role: sys/qemu-agent
