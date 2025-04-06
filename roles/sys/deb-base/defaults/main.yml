@@ -7,6 +7,7 @@ packages_essential:
   - git
   - curl
   - rsync
+  - tmux
   - fzf
   - tree
   - wget

@@ -1,1 +1,5 @@
-
+---
+DOWNLOADS_DIR: "dls"
+DEV_DIR: "dev"
+MEDIA_DIR: "media"
+MUSIC_DIR: "{{ MEDIA_DIR }}/music"

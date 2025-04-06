@@ -53,6 +53,7 @@
   roles:
     - usr/XDG_base_directories
     - usr/git_usr_configs
+    - sys/nfs-client
 
   pre_tasks:
       # Create users defined in group vars
@@ -128,6 +129,10 @@
         dest: "{{ xdg_config_home }}/neovim"
         update: true
 
+    - name: "Fetching personal directory structure"
+      ansible.builtin.include_vars:
+        file: group_vars/all/personal_dirs.yml
+
     - name: "Creating personal directories in ~/"
       become: yes
       become_user: "{{ target_user }}"
@@ -140,8 +145,6 @@
       loop:
         - "{{ DOWNLOADS_DIR }}"
         - "{{ DEV_DIR }}"
-        - "{{ DOCUMENTS_DIR }}"
-        - "{{ DOCUMENTS_DIR }}/local"
         - "{{ MEDIA_DIR }}"
         - "{{ MUSIC_DIR }}"
         - "{{ MUSIC_DIR }}/new"

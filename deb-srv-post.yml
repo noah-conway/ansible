@@ -9,4 +9,3 @@
 
   roles:
     - usr/create-user-loop
-    - sys/nfs-server
