@@ -126,7 +126,7 @@
       become_user: "{{ target_user }}"
       ansible.builtin.git:
         repo: "{{ GIT_SSH_URL }}/{{ nvim_repo }}.git"
-        dest: "{{ xdg_config_home }}/neovim"
+        dest: "{{ xdg_config_home }}/nvim"
         update: true
 
     - name: "Fetching personal directory structure"
