@@ -1,0 +1,8 @@
+---
+- name: "Installing Navidrome"
+  hosts: deblxc
+  #ansible_user: otto
+
+  roles:
+    - role: apps/navidrome
+ 

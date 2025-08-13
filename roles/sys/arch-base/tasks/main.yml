@@ -13,6 +13,10 @@
   ansible.builtin.include_tasks:
     file: install-essential-packages.yml
 
+- name: '----------> Basic sudo configurations'
+  ansible.builtin.include_tasks:
+    file: sudo.yml
+
 - name: 'Locking ansible automation user'
   ansible.builtin.user:
     name: otto

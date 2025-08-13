@@ -1,0 +1,30 @@
+---
+- name: "Installing redshift | Installing redshift on Arch Linux systems"
+  become: yes
+  community.general.pacman:
+    name: redshift
+    state: present
+
+- name: "Installing redshift | Copying base configuration file"
+  become: yes
+  become_user: "{{ target_user }}"
+  ansible.builtin.copy:
+    src: "files/redshift.conf"
+    dest: "/home/{{ target_user }}/redshift/redshift.conf"
+
+- name: "Installing redshift | configuring location"
+  become: yes
+  become_user: "{{ target_user }}"
+  ansible.builtin.lineinfile:
+    path: "/home/{{ target_user }}/redshift/redshift.conf"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    insertafter: "^; Set the day and night screen temperatures\s*$"
+  loop:
+    - line: "temp-night={{ temp-night }}"
+      regexp: "^temp-night=\d+$"
+    - line: "temp-day={{ temp-day }}"
+      regexp: "^temp-day=\d+$"
+
+
+  

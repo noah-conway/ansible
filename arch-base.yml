@@ -1,5 +1,5 @@
 ---
-- hosts: archboxes
+- hosts: archwks
   become: yes
 
   roles:

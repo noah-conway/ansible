@@ -1,0 +1,47 @@
+---
+- name: "Installing dwm dependancies & packages for Arch Linux"
+  become: yes
+  community.general.pacman:
+    name: "{{ dwm_packages }}"
+    state: present
+
+- name: "Cloning suckless repos"
+  become: yes
+  become_user: "{{ target_user }}"
+  ansible.builtin.git:
+    repo: "{{ GIT_SSH_URL }}/{{ item }}.git"
+    dest: "/home/{{ target_user }}/.config/{{ item }}"
+    update: false
+  loop:
+    - "{{ dwm_repo }}"
+    - "{{ st_repo }}"
+    - "{{ dwmblocks_repo }}"
+
+- name: "Making suckless binaries"
+  become: true
+  community.general.make:
+    chdir: "/home/{{ target_user }}/.config/{{ item }}"
+    targets:
+      - clean
+      - install
+  loop:
+    - "{{ dwm_repo }}"
+    - "{{ st_repo }}"
+    - "{{ dwmblocks_repo }}"
+
+- name: "Copying .xinitrc file"
+  become: yes
+  become_user: "{{ target_user }}"
+  ansible.builtin.copy:
+    src: files/DWM_xinitrc
+    dest: "/home/{{ target_user }}/.xinitrc"
+    mode: '0644'
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
+
+
+
+
+
+
+

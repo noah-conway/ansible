@@ -1,0 +1,19 @@
+---
+- name: 'Removing password timeout for Sudo'
+  become: yes
+  ansible.builtin.lineinfile:
+    path: /etc/sudoers
+    state: present
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    insertafter: "{{ item.insertafter }}"
+    validate: '/usr/sbin/visudo -cf %s'
+  loop:
+    - regexp: "^## Disable password timeout$"
+      line: "## Disable password timeout"
+      insertafter: EOF
+    - regexp: '^Defaults\s+passwd_timeout=\d+$'
+      line: 'Defaults passwd_timeout=0'
+      insertafter: "^## Disable password timeout$"
+    
+

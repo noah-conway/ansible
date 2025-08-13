@@ -54,6 +54,7 @@
     - usr/XDG_base_directories
     - usr/git_usr_configs
     - sys/nfs-client
+    - usr/suckless
 
   pre_tasks:
       # Create users defined in group vars
@@ -119,7 +120,7 @@
       ansible.builtin.git:
         repo: "{{ GIT_SSH_URL }}/{{ tmux_repo }}.git"
         dest: "{{ xdg_config_home }}/tmux"
-        update: true
+        update: false
  
     - name: "Pulling Neovim configuration from {{ GIT_SSH_URL }}"
       become: yes
@@ -127,27 +128,12 @@
       ansible.builtin.git:
         repo: "{{ GIT_SSH_URL }}/{{ nvim_repo }}.git"
         dest: "{{ xdg_config_home }}/nvim"
-        update: true
+        update: false
 
     - name: "Fetching personal directory structure"
       ansible.builtin.include_vars:
         file: group_vars/all/personal_dirs.yml
 
-    - name: "Creating personal directories in ~/"
-      become: yes
-      become_user: "{{ target_user }}"
-      ansible.builtin.file:
-        path: "/home/{{ target_user }}/{{ item }}"
-        owner: "{{ target_user }}"
-        group: "{{ target_user }}"
-        mode: "0755"
-        state: directory
-      loop:
-        - "{{ DOWNLOADS_DIR }}"
-        - "{{ DEV_DIR }}"
-        - "{{ MEDIA_DIR }}"
-        - "{{ MUSIC_DIR }}"
-        - "{{ MUSIC_DIR }}/new"
 
     
 

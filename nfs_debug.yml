@@ -1,0 +1,30 @@
+---
+- name: "debugging"
+  remote_user: otto
+  hosts: deb
+
+
+  tasks:
+    - name: "ip"
+      debug:
+        msg: "ip: {{ ansible_default_ipv4.network }}"
+
+    - name: "Calculate network address"
+      ansible.builtin.set_fact:
+        network: "{{ ansible_default_ipv4.address | ansible.utils.ipaddr(ansible_default_ipv4.netmask) }}"
+
+    - name: "Show network address"
+      debug:
+        msg: "Network: {{ network }}"
+
+    - name: "debugging list"
+      ansible.builtin.debug:
+        msg: "ADDING SHARE Name: {{ item.name }}, send_to {{ item.share_to }}"
+      loop: "{{ nfs_directories }}"
+      when: "item.share_to == ansible_default_ipv4.address or item.share_to == ansible_default_ipv4.network"
+
+    - name: "debugging netmask"
+      ansible.builtin.debug:
+        msg: "netmask: {{ ansible_default_ipv4.netmask }}"
+
+    

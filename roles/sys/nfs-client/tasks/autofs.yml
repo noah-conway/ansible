@@ -20,10 +20,11 @@
   become: yes
   ansible.builtin.lineinfile:
     path: "/etc/autofs/{{ autofs_nfs_file }}"
-    line: "{{ item }} -fstype={{ nfs_version }},{{ mount_dir_option }} {{ nfs_server_addr }}:/mnt/data/exports/{{ item }}"
+    line: "{{ item }} -fstype={{ nfs_version }},{{ mount_dir_option }} {{ nfs_server_addr }}:/mnt/data/exports/{{ item.name }}"
     insertafter: EOF
     create: true
   loop: "{{ nfs_directories }}"
+  when: "item.share_to == ansible_default_ipv4.address or item.share_to == ansible_default_ipv4.network"
   notify: "Restart autofs"
 
 - name: "Enabling autofs service"

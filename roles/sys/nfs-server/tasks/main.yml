@@ -36,7 +36,7 @@
 - name: "Creating shared directories"
   become: yes
   ansible.builtin.file:
-    path: "{{ nfs_exports_root }}/exports/{{ item }}"
+    path: "{{ nfs_exports_root }}/exports/{{ item.name }}"
     state: directory
     mode: '2770'
     group: "{{ nfs_groupname }}"
@@ -60,7 +60,7 @@
   become: yes
   ansible.builtin.lineinfile:
     path: /etc/exports
-    line: "{{ nfs_exports_root }}/exports/{{ item }} {{ nfs_share_network }}({{ nfs_options }})" 
+    line: "{{ nfs_exports_root }}/exports/{{ item.name }} {{ item.share_to }}/{{ ansible_default_ipv4.netmask }}({{ nfs_options }})" 
     insertafter: EOF
     create: yes
   loop: "{{ nfs_directories }}"

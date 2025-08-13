@@ -1,0 +1,37 @@
+---
+- name: "Installing and configuring navidrome on proxmox vm"
+  hosts: navidrome
+
+  roles:
+    - role: apps/navidrome
+
+- name: "Creating Navidrome user on NFS server"
+  hosts: hellbastard
+  vars:
+    navidrome_user: "navidrome"
+
+  tasks:
+    - name: "Get UID of Navidrome user from Navidrome server"
+      command: "id -u {{ navidrome_user }}"
+      delegate_to: navidrome
+      register: navidrome_uid
+
+    - name: "Creating Navidrome user and adding to NFS group"
+      become: yes
+      ansible.builtin.user:
+        name: "{{ navidrome_user }}"
+        uid: "{{ navidrome_uid.stdout }}"
+        group: "{{ nfs_groupname }}"
+        append: true
+        create_home: false
+
+
+    - name: debug
+      debug:
+        msg: "uid: {{ navidrome_uid.stdout }}"
+
+
+
+
+
+

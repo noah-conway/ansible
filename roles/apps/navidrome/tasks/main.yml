@@ -1,0 +1,48 @@
+---
+#### NOTE ############
+# This role doesn't install navidrome, and assumes that navidrome is already installed using the community helper script
+# https://community-scripts.github.io/ProxmoxVE/scripts?id=navidrome
+# This role performs some additional post-install configuration, including
+- name: "Display current user"
+  debug:
+    var: ansible_user
+
+- name: "Installing Navidrome | ensuring apt is up to date"
+  become: yes
+  ansible.builtin.apt:
+    name: "*"
+    state: latest
+    update_cache: yes
+
+- name: "Installing Navidrome | installing dependencies & NFS-client"
+  become: yes
+  ansible.builtin.apt:
+    name: 
+      - ffmpeg
+      - nfs-common
+    state: latest
+
+- name: "Pulling navidrome url"
+  become: yes
+  ansible.builtin.apt:
+    deb: "{{ navidrome_deb_url }}"
+    #dest: "/tmp/{{ navidrome_deb_url | basename }}"
+
+- name: "Specifying music library path"
+  become: yes
+  ansible.builtin.lineinfile:
+    path: "/etc/navidrome/navidrome.toml"
+    regexp: "^MusicFolder = *.*$"
+    line: "MusicFolder = {{ music_folder_path }}"
+    create: yes
+    insertafter: "EOF"
+
+- name: "Starting Navidrome service"
+  ansible.builtin.systemd_service:
+    name: navidrome
+    enabled: true
+
+- name: "UFW configuration"
+  ansible.builtin.include_tasks:
+    file: ufw.yml
+    

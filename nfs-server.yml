@@ -1,10 +1,4 @@
 ---
-- name: "Setting up base Debian VM"
-  ansible.builtin.import_playbook: deb-srv-base.yml
-
-- name: "Post-setup configurations for Debian VM"
-  ansible.builtin.import_playbook: deb-srv-post.yml
-
 - name: "Setting up main NFS server on Debian system"
   hosts: hellbastard
   remote_user: otto

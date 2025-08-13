@@ -1,0 +1,7 @@
+---
+- name: "Setting up main Debian VM"
+  hosts: hellbastard
+
+  roles:
+    - apps/docker
+

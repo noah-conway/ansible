@@ -7,6 +7,7 @@
   when: 'ansible_os_family == "Archlinux"'
 
 - name: 'Creating NFS mount directory'
+  become: true
   ansible.builtin.file:
     path: "{{ nfs_mount_dir }}"
     state: directory

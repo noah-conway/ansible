@@ -1,0 +1,20 @@
+---
+- name: "Copying ST terminfo to remote host | creating directories"
+  become: yes
+  ansible.builtin.file:
+    path: "/usr/share/terminfo/s"
+    owner: "root"
+    group: "root"
+    mode: 0755
+    state: directory
+
+- name: "Copying ST terminfo to remote host | copying files"
+  become: yes
+  ansible.builtin.copy:
+    src: "files/st-256color"
+    dest: "/usr/share/terminfo/s/st-256color"
+    owner: "root"
+    group: "root"
+    mode: 0644
+
+

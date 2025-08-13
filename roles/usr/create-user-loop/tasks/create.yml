@@ -11,7 +11,7 @@
     name: 
       - zsh
     state: present
-  when: 'item.shell is defined and has_zsh_user == true'
+  when: 'has_zsh_user == true'
 
 - name: 'Creating "sudoers" group'
   become: yes
@@ -33,7 +33,7 @@
   ansible.builtin.user:
     name: "{{ item.username }}"
     uid: "{{ item.uid | default(omit) }}"
-    password: "{{ item.password | default(omit) }}"
+    password: "{{ item.password | password_hash('sha512') | default(omit) }}"
     shell: "/bin/{{ item.shell if item.shell is defined else default_shell }}"
     createhome: true
     generate_ssh_key: "{{ item.create_ssh_key | default(False) }}"

@@ -25,7 +25,9 @@ packages_essential:
   - unrar
   - unzip
   - tar
+  - xz
   - lm_sensors
+  - lshw
   - bash-completion
   - dash
   - man-pages

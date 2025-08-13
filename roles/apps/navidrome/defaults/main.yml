@@ -1,0 +1,4 @@
+---
+navidrome_deb_url: "https://github.com/navidrome/navidrome/releases/download/v0.55.2/navidrome_0.55.2_linux_amd64.deb"
+music_folder_path: "/mnt/data/music/library"
+navidrome_port: 4533

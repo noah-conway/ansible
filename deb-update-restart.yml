@@ -1,0 +1,21 @@
+---
+- name: "Maintanance on Debian Servers"
+  hosts: deb
+
+  tasks:
+    - name: "Updating server"
+      become: yes
+      ansible.builtin.apt:
+        name: "*"
+        state: latest
+
+    - name: "Upgrade cache"
+      become: yes
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: "Rebooting machine"
+      become: yes
+      ansible.builtin.reboot:
+        msg: "Rebooting machine in 5 seconds"
+

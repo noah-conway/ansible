@@ -1,0 +1,12 @@
+---
+- name: "Allowing incoming traffic from NFS port"
+  become: yes
+  community.general.ufw:
+    rule: allow
+    proto: "{{ item }}"
+    src: "{{ ansible_default_ipv4.network }}/{{ ansible_default_ipv4.netmask }}"
+    port: "{{ navidrome_port }}"
+  loop:
+    - tcp
+    - udp
+

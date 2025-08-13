@@ -9,3 +9,4 @@
 
   roles:
     - usr/create-user-loop
+    - usr/copy-st-terminfo

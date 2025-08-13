@@ -34,6 +34,7 @@
       become: yes
 
 - name: "Installing Docker | Installing all Docker Packages"
+  become: yes
   ansible.builtin.apt:
     pkg:
       - docker-ce

@@ -11,10 +11,16 @@ nfs_users:
   - noah
 
 nfs_directories:
-  - docs
-  - configs
-  - books
-  - photos
+  - name: docs
+    share_to: "192.168.4.0"
+  - name: configs
+    share_to: "192.168.4.0"
+  - name: books
+    share_to: "192.168.4.0"
+  - name: photos
+    share_to: "192.168.4.0"
+  - name: music
+    share_to: "192.168.5.248"
 
 ## Git variables
 GIT_EMAIL: "nconway@posteo.net"

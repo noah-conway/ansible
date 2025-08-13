@@ -1,0 +1,11 @@
+---
+location-provider: "manual"
+latitude: 39.53
+longitude: 119.81
+
+temp-day: 5700
+temp-night: 3500
+
+fade: 1
+gamma: 0.8
+

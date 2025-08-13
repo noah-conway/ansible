@@ -1,0 +1,24 @@
+--- 
+dwm_packages:
+  - xorg-server
+  - xorg-xinit
+  - xorg-xrandr
+  - xorg-xev
+  - libx11
+  - libxft
+  - libxinerama
+  - freetype2
+  - fontconfig
+  - dunst
+  - flameshot
+  - redshift
+  - lm_sensors #for cpu temps in dwmbar
+  - polkit-gnome
+  - ttf-nerd-fonts-symbols-mono
+  - ttf-roboto-mono
+  - dmenu
+
+dwm_repo: dwm-rev1
+st_repo: st
+dwmblocks_repo: dwmblocks
+
