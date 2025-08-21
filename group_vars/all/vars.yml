@@ -1,14 +1,5 @@
 ANSIBLE_AUTOMATION_USER: "otto"
 GITHUB_URL: "https://github.com/noah-conway/"
-proxmox_user: "root"
-proxmox_pass: "xm^JqfeX2fNtNo"
-proxmox_host: "192.168.5.250"
-proxmox_node: "pve"
-proxmox_vm_storage: "tank"
-proxmox_netif: "eth0"
-proxmox_template_storage: "local:vztmpl"
-proxmox_netbridge: "vmbr0"
-proxmox_lxc_default_pass: "AE&GWwA$mAk5hZ7d$$s4YKoK^3^ite"
 workstation_ssh_keys:
   - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOd9k2JrObmt3GeJXogI06CyY271bmk9lkkmmv6LN79k nconway@posteo.net
   - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKeBMFFIJcjrEXXDzI6so9k5BJjHN+8uDWTpUemwhS/9 nconway@posteo.net

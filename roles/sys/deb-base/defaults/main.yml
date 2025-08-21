@@ -1,4 +1,5 @@
 auto_reboot_time: '11:30' #utc
+timezone: "America/Los_Angeles"
 packages_essential:
   - build-essential
   - nmap

@@ -21,6 +21,7 @@
         memory: "{{ memory }}"
         cpus: "{{ cpus }}"
         netif: '{"net0":"name={{ proxmox_netif }},ip={{ ansible_host }}/{{ subnet_mask }},gw={{ gateway }},bridge={{ proxmox_netbridge }}"}'
+        #password: "{{ proxmox_lxc_default_pass }}"
         hostname: "{{ inventory_hostname }}"
         storage: "{{ proxmox_vm_storage }}"
         node: "{{ proxmox_node }}"
@@ -28,7 +29,6 @@
         timeout: 300
         pubkey: "{{ ssh_pub_key['content'] | b64decode }}"
         onboot: true
-        update: true
         state: present
 
     - name: "Waiting for container creation"

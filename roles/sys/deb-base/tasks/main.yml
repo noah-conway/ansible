@@ -8,6 +8,10 @@
     upgrade: dist
     update_cache: true
 
+- name: '----------> Configuring timezone & locale'
+  ansible.builtin.include_tasks:
+    file: timezone-locale.yml
+
 - name: '----------> Configuring unattended security upgrades'
   ansible.builtin.include_tasks:
     file: unattended-upgrades.yml

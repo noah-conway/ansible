@@ -1,0 +1,9 @@
+proxmox_user: "root"
+# proxmox_pass defined in secret.yml
+proxmox_host: "192.168.5.250"
+proxmox_node: "pmx"
+proxmox_vm_storage: "flash"
+proxmox_netif: "eth0"
+proxmox_template_storage: "local:vztmpl"
+proxmox_netbridge: "vmbr0"
+

@@ -1,11 +1,11 @@
+
+
 [archwks]
 yoga ansible_host=192.168.6.89 ansible_user=otto ansible_connection=ssh ansible_ssh_private_key_file=~/.ssh/noah-newman
 
-[debvms]
-hellbastard ansible_host=192.168.5.251 ansible_user=otto ansible_connection=ssh ansible_ssh_private_key_file=~/.ssh/noah-newman
-navidrome ansible_host=192.168.5.248 ansible_user=otto ansible_connection=ssh ansible_ssh_private_key_file=~/.ssh/noah-newman
-
 [deblxc]
+backups ansible_host=192.168.5.244 subnet_mask=22 gateway=192.168.4.1 remote_user=otto ansible_connection=ssh ansible_ssh_private_key_file=~/.ssh/noah-newman vmid=1244 memory=1024 disk_size=4 cpus=4 ostemplate="debian-12-standard_12.7-1_amd64.tar.zst"
+fileserver ansible_host=192.168.5.249 subnet_mask=22 gateway=192.168.4.1 remote_user=otto ansible_connection=ssh ansible_ssh_private_key_file=~/.ssh/noah-newman vmid=1249 memory=1024 disk_size=8 cpus=2 ostemplate="debian-12-turnkey-fileserver_18.0-1_amd64.tar.gz"
 
 [deb:children]
 debvms
@@ -28,10 +28,17 @@ NAS ansible_host=10.10.26.15 subnet_mask=24 gateway=10.10.26.1 ansible_user=otto
 NFS-test-vm ansible_host=10.10.26.79 subnet_mask=24 gateway=10.10.26.1 ansible_user=otto ansible_connection=ssh ansible_ssh_private_key_file=~/.ssh/noah-newman vmid=15 memory=4096 disk_size=64 cpus=2 ostemplate="debian-12.6.0-amd64-netinst.iso"
 
 [lxcold]
-nextcloud ansible_host=10.10.26.235 subnet_mask=24 gateway=10.10.26.1 remote_user=otto ansible_connection=ssh ansible_ssh_private_key_file=~/.ssh/noah-newman vmid=230 memory=4096 disk_size=32 cpus=2 ostemplate="debian-12-standard_12.2-1_amd64.tar.zst"
 unifiserver ansible_host=10.10.26.50 subnet_mask=24 gateway=10.10.26.1 ansible_user=otto ansible_connection=ssh ansible_ssh_private_key_file=~/.ssh/noah-newman vmid=1050 memory=1024 disk_size=32 cpus=2 ostemplate="debian-12-standard_12.2-1_amd64.tar.zst"
 ansitest ansible_host=10.10.26.226 subnet_mask=24 gateway=10.10.26.1 remote_user=otto ansible_connection=ssh ansible_ssh_private_key_file=~/.ssh/noah-newman vmid=604 memory=1024 disk_size=32 cpus=2 ostemplate="debian-12-standard_12.2-1_amd64.tar.zst"
 
+[lxc:children]
+deblxc
+
+[workstations:children]
+archwks
+
+[servers:children]
+lxc
 
 
 

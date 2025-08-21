@@ -1,8 +1,8 @@
 ---
 users:
-  - username: "noah"
-    password: "3-uP&7"
-    uid: 1011
+  - username: "ncadmin"
+    password: "{{ ncadmin_pass }}"
+    uid: 1025
     shell: bash
     create_ssh_key: true
     copy_ssh_key: true
