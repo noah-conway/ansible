@@ -1,0 +1,13 @@
+---
+target_user: noah
+SMB_server_ip: 192.168.5.249
+share_name: noahs_docs
+share_destination_path: "/home/{{ target_user }}/shared"
+credentials_file_path: "/home/{{ target_user }}/.smbcredentials"
+iocharset: utf8
+default_file_mode: '0664'
+default_dir_mode: '0775'
+smb_share_username: "noah"
+smb_share_password: "edo#A3KP"
+
+

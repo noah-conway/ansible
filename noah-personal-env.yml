@@ -53,8 +53,10 @@
   roles:
     - usr/XDG_base_directories
     - usr/git_usr_configs
-    - sys/nfs-client
-    - usr/suckless
+    - usr/smb-shares
+#    - sys/nfs-client
+#    - usr/suckless
+
 
   pre_tasks:
       # Create users defined in group vars
@@ -130,9 +132,10 @@
         dest: "{{ xdg_config_home }}/nvim"
         update: false
 
-    - name: "Fetching personal directory structure"
-      ansible.builtin.include_vars:
-        file: group_vars/all/personal_dirs.yml
+    - name: "Installing DWM and suckless utilities"
+      ansible.builtin.include_role:
+        name: usr/suckless
+
 
 
     

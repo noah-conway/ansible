@@ -1,5 +1,6 @@
 --- 
 dwm_packages:
+  - mesa
   - xorg-server
   - xorg-xinit
   - xorg-xrandr
@@ -21,4 +22,4 @@ dwm_packages:
 dwm_repo: dwm-rev1
 st_repo: st
 dwmblocks_repo: dwmblocks
-
+scripts_repo: system-scripts

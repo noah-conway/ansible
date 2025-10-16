@@ -1,0 +1,6 @@
+- name: "Installing Radicale CalDAV server"
+  hosts: radicale
+  remote_user: otto
+
+  roles:
+    - role: apps/radicale

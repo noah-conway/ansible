@@ -40,6 +40,43 @@
     group: "{{ target_user }}"
 
 
+- name: "Cloning system-scripts repo"
+  become: true
+  become_user: "{{ target_user }}"
+  ansible.builtin.git:
+    repo: "{{ GIT_SSH_URL }}/{{ scripts_repo }}.git"
+    dest: "/home/{{ target_user }}/dev/{{ scripts_repo }}"
+    update: false
+
+- name: Find all matching files
+  become: true
+  become_user: "{{ target_user }}"
+  ansible.builtin.find:
+    paths: "/home/{{ target_user }}/dev/{{ scripts_repo }}/statusbar"
+    patterns: '^statusbar-.*'
+    use_regex: true
+    file_type: file
+  register: statusbar_scripts
+
+- name: Ensure matching files are executable
+  become: true
+  become_user: "{{ target_user }}"
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    mode: '0755'
+  loop: "{{ statusbar_scripts.files }}"
+
+- name: Create symlinks
+  become: true
+  become_user: "{{ target_user }}"
+  ansible.builtin.file:
+    src: "{{ item.path }}"
+    dest: "/home/{{ target_user }}/.local/bin/{{ (item.path | basename | regex_replace('\\.sh$', '')) }}"
+    state: link
+  loop: "{{ statusbar_scripts.files }}"
+
+  
+
 
 
 

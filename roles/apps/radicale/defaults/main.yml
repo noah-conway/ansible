@@ -1,0 +1,4 @@
+---
+radicale_config_file_path: "/etc/radicale/config"
+radicale_port: 5232
+radicale_storage_path: "/mnt/radicale_mnt/collections"

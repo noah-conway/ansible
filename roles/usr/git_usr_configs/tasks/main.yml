@@ -53,3 +53,10 @@
         token: "{{ GITHUB_PAT }}"
         pubkey: "{{ pubkey['content'] | b64decode }}"
 
+    - name: "Add Github to known_hosts"
+      become: true
+      ansible.builtin.known_hosts:
+        name: github.com
+        key: "{{ lookup('pipe', 'ssh-keyscan -H github.com') }}"
+        path: '/home/{{ target_user }}/.ssh/known_hosts'
+

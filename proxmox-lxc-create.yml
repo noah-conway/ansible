@@ -1,6 +1,6 @@
 ---
 - name: "Provisioning containers on Proxmox as defined in the Ansible inventory file" 
-  hosts: lxc
+  hosts: deblxctest
   gather_facts: false
 
   tasks:

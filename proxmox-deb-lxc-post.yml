@@ -1,14 +1,13 @@
 ---
 - name: "Post-install configuration for Debian LXC containers"
-  hosts: deblxc
+  hosts: deblxctest
   remote_user: root
   vars_files:
     - group_vars/all/workstation-ssh-keys.secret
 
   roles:
-    - role: usr/create-ansible-user
     - role: sys/deb-base
-    #- role: sys/qemu-agent
+    - role: usr/create-ansible-user
     - role: usr/create-user-loop
 
 

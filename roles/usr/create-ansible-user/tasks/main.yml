@@ -3,7 +3,9 @@
   become: yes
   ansible.builtin.group:
     name: automation
+    gid: "{{ automation_gid }}"
     state: present
+
 
 - name: 'Verifying sudo install'
   become: yes
@@ -22,6 +24,7 @@
   become: yes
   ansible.builtin.user:
     name: otto
+    uid: "{{ automation_uuid }}"
     comment: 'Otto the "otto-mated" user ;)'
     groups: automation
     state: present

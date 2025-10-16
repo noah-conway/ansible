@@ -1,0 +1,54 @@
+---
+- name: "Installing radicale deb package"
+  become: yes
+  ansible.builtin.apt:
+    name: radicale
+    state: latest
+
+- name: "Creating Radicale user"
+  become: yes
+  ansible.builtin.user:
+    name: radicale
+    uid: 1111
+    system: true
+    shell: '/sbin/nologin'
+    group: radicale
+    create_home: yes
+
+- name: "Configuring Radicale Network Access"
+  become: yes
+  ansible.builtin.lineinfile:
+    path: "{{ radicale_config_file_path }}"
+    regexp: '^#?hosts\s*=\s*.*$'
+    line: 'hosts = 0.0.0.0:{{ radicale_port }}'
+    insertafter: '^\[server\]$'
+
+- name: "Ensuring Radicale Storage Path Exists"
+  become: yes
+  ansible.builtin.file:
+    path: "{{ radicale_storage_path }}"
+    state: directory
+    owner: radicale
+    group: sharing
+    mode: 0755
+
+- name: "Configuring Radicale Storage Path"
+  become: yes
+  ansible.builtin.lineinfile:
+    path: "{{ radicale_config_file_path }}"
+    regexp: '^#?filesystem_folder\s*=\s*.*$'
+    line: 'filesystem_folder = {{ radicale_storage_path }}'
+    insertafter: '^\[storage\]$'
+
+- name: "Copying Radicale SystemD unit file"
+  become: yes
+  ansible.builtin.copy:
+    src: "files/radicale.service"
+    dest: "/etc/systemd/system/radicale.service" 
+    owner: root
+    group: root
+    mode: 777
+
+
+
+

@@ -1,6 +1,7 @@
 ---
 - name: "Maintanance on Debian Servers"
-  hosts: deb
+  hosts: deblxc
+  remote_user: otto
 
   tasks:
     - name: "Updating server"

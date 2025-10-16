@@ -1,0 +1,58 @@
+---
+- name: "Setting up SMB shares | Installing cifs-utils for arch-based distributions"
+  become: true
+  ansible.builtin.pacman:
+    name: cifs-utils
+    state: present
+
+- name: "Setting up SMB shares | getting UID/GID of target user {{ target_user }}"
+  ansible.builtin.getent:
+    database: passwd
+    key: "{{ target_user }}"
+  register: target_user_info
+  # target_user_info.entries[0].uid contains UID
+
+- name: "Setting up SMB shares | creating credentials file"
+  become: true
+  ansible.builtin.lineinfile:
+    path: "{{ credentials_file_path }}"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
+    mode: '600'
+    create: true
+  loop:
+    - line: 'password={{ smb_share_password }}'
+      regexp: '^password=.*$'
+    - line: 'username={{ smb_share_username }}'
+      regexp: '^username=[a-z]+$'
+
+- name: "Setting up SMB shares | creating mount point directory"
+  become: yes
+  ansible.builtin.file:
+    path: "{{ share_destination_path }}"
+    state: directory
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
+    mode: '0755'
+
+- name: "Setting up SMB shares | creating header in fstab file"
+  become: yes
+  ansible.builtin.lineinfile:
+    path: /etc/fstab
+    regexp: '^\# Ansible\-created SMB share connections$'
+    line: '# Ansible-created SMB share connections'
+    insertafter: EOF
+
+- name: "Setting up SMB shares | adding shares to fstab file"
+  become: yes
+  ansible.builtin.lineinfile:
+    path: /etc/fstab
+    regexp: '^//{{ SMB_server_ip }}/{{ share_name }}.*'
+    line: "//{{ SMB_server_ip }}/{{ share_name }}   {{ share_destination_path }}    cifs    credentials={{ credentials_file_path }},uid={{ target_user_info.ansible_facts.getent_passwd.noah[1] }},gid={{ target_user_info.ansible_facts.getent_passwd.noah[2] }},iocharset={{ iocharset }},file_mode={{ default_file_mode }},dir_mode={{ default_dir_mode }},nofail,user 0 0"
+    insertafter: '^\# Ansible\-created SMB share connections$'
+
+
+
+  

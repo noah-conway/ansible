@@ -1,10 +1,17 @@
 
 
 [archwks]
+Arch-Ansible-Test ansible_host=192.168.6.131 ansible_user=otto ansible_connection=ssh ansible_ssh_private_key_file=~/.ssh/noah-newman
 yoga ansible_host=192.168.6.89 ansible_user=otto ansible_connection=ssh ansible_ssh_private_key_file=~/.ssh/noah-newman
 
+
+[deblxctest]
+test001 ansible_host=192.168.5.230 subnet_mask=22 gateway=192.168.4.1 remote_user=otto ansible_connection=ssh ansible_ssh_private_key_file=~/.ssh/noah-newman vmid=1230 memory=2048 disk_size=4 cpus=2 ostemplate="debian-12-standard_12.7-1_amd64.tar.zst"
+
 [deblxc]
+audiobookshelf ansible_host=192.168.5.243 subnet_mask=22 gateway=192.168.4.1 remote_user=otto ansible_connection=ssh ansible_ssh_private_key_file=~/.ssh/noah-newman vmid=1243 memory=2048 disk_size=4 cpus=2 ostemplate="debian-12-standard_12.7-1_amd64.tar.zst"
 backups ansible_host=192.168.5.244 subnet_mask=22 gateway=192.168.4.1 remote_user=otto ansible_connection=ssh ansible_ssh_private_key_file=~/.ssh/noah-newman vmid=1244 memory=1024 disk_size=4 cpus=4 ostemplate="debian-12-standard_12.7-1_amd64.tar.zst"
+radicale ansible_host=192.168.5.246 subnet_mask=22 gateway=192.168.4.1 remote_user=otto ansible_connection=ssh ansible_ssh_private_key_file=~/.ssh/noah-newman vmid=1246 memory=512 disk_size=2 cpus=2 ostemplate="debian-12-standard_12.7-1_amd64.tar.zst"
 fileserver ansible_host=192.168.5.249 subnet_mask=22 gateway=192.168.4.1 remote_user=otto ansible_connection=ssh ansible_ssh_private_key_file=~/.ssh/noah-newman vmid=1249 memory=1024 disk_size=8 cpus=2 ostemplate="debian-12-turnkey-fileserver_18.0-1_amd64.tar.gz"
 
 [deb:children]

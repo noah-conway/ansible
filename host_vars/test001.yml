@@ -1,0 +1,20 @@
+---
+users:
+  - username: "ncadmin"
+    password: "{{ ncadmin_pass }}"
+    uid: 1025
+    shell: bash
+    create_ssh_key: true
+    copy_ssh_key: true
+    sudo: true
+    user_state: present
+
+
+bind_mount_username: share
+bind_mount_groupname: sharing
+
+mp0:
+  source: "/rust/media"
+  dest: "/mnt/media_mnt"
+  readonly: false
+

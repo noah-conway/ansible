@@ -17,6 +17,7 @@
 
 # Linking Dash to /bin/sh - Dash installed in "essential packages" module
 - name: "Relinking /bin/sh to Dash"
+  become: true
   ansible.builtin.file:
     src: /bin/dash
     dest: /usr/bin/sh
@@ -24,6 +25,7 @@
     force: yes
 
 - name: "Adding Dash re-link pacman hook"
+  become: true
   ansible.builtin.copy:
     src: files/dash.hook
     dest: /etc/pacman.d/hooks/dash.hook
