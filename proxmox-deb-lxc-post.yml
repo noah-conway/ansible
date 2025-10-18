@@ -10,5 +10,61 @@
     - role: usr/create-ansible-user
     - role: usr/create-user-loop
 
+  tasks:
+    - name: "Mapping bind mount group"
+      ansible.builtin.group:
+        name: "{{ bind_mount_groupname }}"
+        gid: "{{ PROXMOX_BIND_MOUNT_GID }}"
+        state: present
+      when: "bind_mounts is defined and bind_mounts | length > 0"
+
+    - name: "Mapping bind mount user"
+      ansible.builtin.user:
+        name: "{{ bind_mount_username }}"
+        shell: "/bin/bash"
+        uid: "{{ PROXMOX_BIND_MOUNT_UID }}"
+        groups: "{{ bind_mount_groupname }}"
+        append: true
+        create_home: true
+        state: present
+      when: "bind_mounts is defined and bind_mounts | length > 0"
+
+    - name: "Adding bind mounts to Proxmox containers | adding bind mounts"
+      delegate_to: 127.0.0.1
+      community.proxmox.proxmox:
+        api_user: "{{ proxmox_user }}@pam"
+        api_password: "{{ proxmox_pass }}"
+        api_host: "{{ proxmox_host }}"
+        vmid: "{{ vmid }}"
+        hostname: "{{ inventory_hostname }}"
+        state: stopped
+      when: "bind_mounts is defined and bind_mounts | length > 0"
+
+    - name: "Adding bind mounts to Proxmox containers | adding bind mounts"
+      delegate_to: 127.0.0.1
+      community.proxmox.proxmox:
+        api_user: "{{ proxmox_user }}@pam"
+        api_password: "{{ proxmox_pass }}"
+        api_host: "{{ proxmox_host }}"
+        node: "{{ proxmox_node }}"
+        vmid: "{{ vmid }}"
+        hostname: "{{ inventory_hostname }}"
+        mount_volumes: "{{ bind_mounts }}"
+      when: "bind_mounts is defined and bind_mounts | length > 0"
+        
+    - name: "Adding bind mounts to Proxmox containers | stopping container"
+      delegate_to: 127.0.0.1
+      community.proxmox.proxmox:
+        api_user: "{{ proxmox_user }}@pam"
+        api_password: "{{ proxmox_pass }}"
+        api_host: "{{ proxmox_host }}"
+        vmid: "{{ vmid }}"
+        hostname: "{{ inventory_hostname }}"
+        state: started
+      when: "bind_mounts is defined and bind_mounts | length > 0"
+ 
+
+   
+
 
 

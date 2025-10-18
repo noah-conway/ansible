@@ -7,3 +7,5 @@ proxmox_netif: "eth0"
 proxmox_template_storage: "local:vztmpl"
 proxmox_netbridge: "vmbr0"
 
+PROXMOX_BIND_MOUNT_UID: "1111"
+PROXMOX_BIND_MOUNT_GID: "10000"

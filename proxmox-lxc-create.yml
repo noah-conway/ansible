@@ -8,12 +8,12 @@
       become: no
       delegate_to: 127.0.0.1
       ansible.builtin.slurp:
-        src: "~/.ssh/noah-newman.pub"
+        src: "~/.ssh/id_ed25519.pub"
       register: ssh_pub_key
 
     - name: "Provisioning LXC containers on Proxmox node {{ proxmox_host }}"
       delegate_to: 127.0.0.1
-      community.general.proxmox:
+      community.proxmox.proxmox:
         api_user: "{{ proxmox_user }}@pam"
         api_password: "{{ proxmox_pass }}"
         api_host: "{{ proxmox_host }}"
@@ -25,6 +25,7 @@
         hostname: "{{ inventory_hostname }}"
         storage: "{{ proxmox_vm_storage }}"
         node: "{{ proxmox_node }}"
+        #mount_volumes: "{{ bind_mounts }}"
         ostemplate: "{{ proxmox_template_storage }}/{{ ostemplate }}"
         timeout: 300
         pubkey: "{{ ssh_pub_key['content'] | b64decode }}"
@@ -38,7 +39,7 @@
 
     - name: "Starting LXC containers on Proxmox node {{ proxmox_host }}"
       delegate_to: 127.0.0.1
-      community.general.proxmox:
+      community.proxmox.proxmox:
         node: "pmx"
         vmid: "{{ vmid }}"
         api_user: "{{ proxmox_user }}@pam"
