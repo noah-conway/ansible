@@ -1,6 +1,6 @@
 ---
 - name: "Post-install configuration for Debian LXC containers"
-  hosts: deblxctest
+  hosts: deblxc
   remote_user: root
   vars_files:
     - group_vars/all/workstation-ssh-keys.secret

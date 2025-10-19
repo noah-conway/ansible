@@ -1,0 +1,28 @@
+---
+# VARIABLES:
+# app
+# source
+# mode
+# target_dir
+# asset pattern
+# clean_install
+# use_original_filename
+# Githib token optional
+# apitimeout
+# dl timeout
+# max retries
+# retry delay
+
+- name: "Ensuring jq installation"
+  become: true
+  ansible.builtin.package:
+    name: jq
+    state: present
+
+- name: "Setting derived variables"
+  ansible.builtin.set_fact:
+    app_lc: "{{ app_name | lower | regex_replace(' ', '') }}"
+    version_file: "{{ ansible.env.HOME }}/.{{ app_name | lower | regex_replace(' ', '') }}'
+
+- 
+

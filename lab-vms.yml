@@ -1,0 +1,7 @@
+---
+- name: "Installing Audiobookshelf"
+  hosts: audiobooks
+  remote_user: otto
+
+  roles:
+    - role: apps/audiobookshelf

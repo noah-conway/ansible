@@ -1,0 +1,4 @@
+---
+- name: "Upgrading Debian installations to version {{ DEB_CURRENT_VERSION_NO }} {{ DEB_CURRENT_VERSION }}"
+  
+  

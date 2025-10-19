@@ -1,0 +1,63 @@
+---
+- name: "Adding Audiobookshelf apt key"
+  become: true
+  ansible.builtin.get_url:
+    url: "{{ audiobookshelf_repo_key_url }}"
+    dest: /etc/apt/trusted.gpg.d/adb-archive-keyring.asc
+    mode: '0644'
+    force: true
+
+- name: "Add audiobookshelf apt repository"
+  become: true
+  ansible.builtin.apt_repository:
+    repo: 'deb https://advplyr.github.io/audiobookshelf-ppa ./'
+    state: present
+  notify: "Update apt cache"
+
+- name: "Flush handlers"
+  ansible.builtin.meta: flush_handlers
+
+- name: "Installing Audiobookshelf"
+  become: true
+  ansible.builtin.apt:
+    name: audiobookshelf
+    state: latest
+
+- name: "Assembling Audiobookshelf config file"
+  become: true
+  ansible.builtin.lineinfile:
+    path: "{{ audiobookshelf_config_file }}"
+    line: "{{ item.line }}"
+    regexp: "{{ item.regexp }}"
+    insertafter: "{{ item.insertafter }}"
+    state: present
+    owner: root
+    group: root
+    mode: '0644'
+    create: true
+  loop:
+    - line: "PORT={{ audiobookshelf_port }}"
+      regexp: '^PORT=.*$'
+      insertafter: EOF
+    - line: "TONE_PATH={{ audiobookshelf_tone_path }}"
+      regexp: '^TONE_PATH=.*$'
+      insertafter: '^PORT=.*$'
+    - line: "FFPROBE_PATH={{ audiobookshelf_ffprobe_path }}"
+      regexp: '^FFPROBE_PATH=.*$'
+      insertafter: '^TONE_PATH=.*$'
+    - line: "FFMPEG_PATH={{ audiobookshelf_ffmpeg_path }}"
+      regexp: '^FFMPEG_PATH=.*$'
+      insertafter: '^FFPROBE_PATH=.*$'
+    - line: "CONFIG_PATH={{ audiobookshelf_config_path }}"
+      regexp: '^CONFIG_PATH=.*$'
+      insertafter: '^FFPROBE_PATH=.*$'
+    - line: "METADATA_PATH={{ audiobookshelf_metadata_path }}"
+      regexp: '^METADATA_PATH=.*$'
+      insertafter: '^CONFIG_PATH=.*$'
+ 
+- name: "Starting and enabling audiobookshelf"
+  ansible.builtin.systemd_service:
+    name: audiobookshelf
+    state: started
+    enabled: true
+

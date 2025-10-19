@@ -9,3 +9,5 @@ proxmox_netbridge: "vmbr0"
 
 PROXMOX_BIND_MOUNT_UID: "1111"
 PROXMOX_BIND_MOUNT_GID: "10000"
+
+DEBIAN_13: "debian-13-standard_13.1-2_amd64.tar.zst"

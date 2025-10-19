@@ -1,0 +1,12 @@
+audiobookshelf_repo_key_url: 'https://advplyr.github.io/audiobookshelf-ppa/KEY.gpg'
+audiobookshelf_repo: 'deb https://advplyr.github.io/audiobookshelf-ppa ./'
+
+audiobookshelf_base_dir: '/usr/share/audiobookshelf'
+audiobookshelf_metadata_path: '{{ audiobookshelf_base_dir }}/metadata'
+audiobookshelf_config_path: '{{ audiobookshelf_base_dir }}/config'
+audiobookshelf_ffmpeg_path: '{{ audiobookshelf_base_dir }}/ffmpeg'
+audiobookshelf_ffprobe_path: '{{ audiobookshelf_base_dir }}/ffprobe'
+audiobookshelf_tone_path: '{{ audiobookshelf_base_dir }}/tone'
+
+audiobookshelf_config_file: '/etc/defaults/audiobookshelf'
+audiobookshelf_port: '13378'
