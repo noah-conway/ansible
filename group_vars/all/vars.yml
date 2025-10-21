@@ -4,6 +4,7 @@ workstation_ssh_keys:
   - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOd9k2JrObmt3GeJXogI06CyY271bmk9lkkmmv6LN79k nconway@posteo.net
   - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKeBMFFIJcjrEXXDzI6so9k5BJjHN+8uDWTpUemwhS/9 nconway@posteo.net
   - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBlKjREPJDXm9nbdV3EtVRsy3fFCypRWYSDCgVLqcvdM Key for noah@yoga
+  - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJgkAPIjW5BDBpj5itAm8WTG5c5at7ouXvmAU7bCGI4c Key for noah@nr200
 ### Secret variables:
 #       localuser_default_password
 #       github_PAT
