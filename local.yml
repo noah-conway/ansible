@@ -8,3 +8,9 @@
       path: /tmp/pull_works.txt
       state: touch
       mode: u=rw,g=r,o-rwx
+
+  - name: "Install htop"
+    become: true
+    community.general.pacman:
+      name: htop
+      state: present
